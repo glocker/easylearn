@@ -18,7 +18,16 @@ export const CourseList = () => {
           collection(db, "courses"),
           orderBy("createdAt", "desc")
         );
+
+        // Add check for collection existence
         const snapshot = await getDocs(coursesQuery);
+        if (snapshot.empty) {
+          console.log("No courses available");
+          setCourses([]);
+          setCategories([]);
+          return;
+        }
+
         const coursesData = snapshot.docs.map(
           (doc) =>
             ({
@@ -35,7 +44,9 @@ export const CourseList = () => {
         setCourses(coursesData);
         setCategories(uniqueCategories);
       } catch (error) {
-        console.error("Error during course loading occured:", error);
+        console.error("Error during course loading occurred:", error);
+        setCourses([]);
+        setCategories([]);
       } finally {
         setIsLoading(false);
       }
@@ -96,7 +107,7 @@ export const CourseList = () => {
 
       {filteredCourses.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500">Курсы не найдены</p>
+          <p className="text-gray-500">Courses not found</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
