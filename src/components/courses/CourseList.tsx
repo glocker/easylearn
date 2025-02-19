@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  addDoc,
+  Timestamp,
+} from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Course } from "../../types/Course";
+import { CreateCourseForm } from "./CreateCourseForm";
 
 export const CourseList = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -10,6 +18,8 @@ export const CourseList = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -64,6 +74,50 @@ export const CourseList = () => {
     return matchesCategory && matchesSearch;
   });
 
+  const createCourse = async (courseData: Omit<Course, "id">) => {
+    try {
+      const courseRef = collection(db, "courses");
+      const newCourse = {
+        ...courseData,
+        createdAt: Timestamp.now(),
+        cards: [],
+      };
+
+      const docRef = await addDoc(courseRef, newCourse);
+
+      // Add new course to the state
+      setCourses((prevCourses) => [
+        { ...newCourse, id: docRef.id } as Course,
+        ...prevCourses,
+      ]);
+
+      return docRef.id;
+    } catch (error) {
+      console.error("Error creating course:", error);
+      throw error;
+    }
+  };
+
+  const handleCreateCourse = async (
+    courseData: Omit<Course, "id" | "createdAt" | "cards">
+  ) => {
+    setIsCreating(true);
+    try {
+      await createCourse({
+        ...courseData,
+        cards: [],
+      });
+      setShowCreateForm(false);
+      // Show success message
+      alert("Course created successfully!");
+    } catch (error) {
+      console.error("Error creating course:", error);
+      alert("Failed to create course. Please try again.");
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -73,12 +127,28 @@ export const CourseList = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6">
+    <div>
+      <div className="mb-8 flex justify-between items-center">
+        <h2 className="text-3xl font-bold text-gray-900">
           Courses for learning
         </h2>
+        <button
+          onClick={() => setShowCreateForm(true)}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Create Course
+        </button>
+      </div>
 
+      {showCreateForm && (
+        <CreateCourseForm
+          onSubmit={handleCreateCourse}
+          onCancel={() => setShowCreateForm(false)}
+          isLoading={isCreating}
+        />
+      )}
+
+      <div className="mb-8">
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <div className="relative flex-1">
             <input

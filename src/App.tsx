@@ -6,39 +6,15 @@ import { CoursePlayer } from "./components/courses/CoursePlayer";
 import { CourseCreator } from "./components/courses/CourseCreator";
 import { CourseList } from "./components/courses/CourseList";
 import { Profile } from "./components/Profile";
+import { CourseDetails } from "./components/courses/CourseDetails";
 
 function App() {
   return (
     <Router>
       <Layout>
         <Routes>
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/courses" element={<CourseList />} />
-          <Route
-            path="/courses/create"
-            element={
-              <ProtectedRoute adminOnly>
-                <CourseCreator />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/courses/:id"
-            element={
-              <ProtectedRoute>
-                <CoursePlayer courseId="" />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
           <Route path="/" element={<CourseList />} />
+          <Route path="/courses/:courseId" element={<CourseDetails />} />
         </Routes>
       </Layout>
     </Router>
