@@ -4,11 +4,30 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link href="/src/styles/globals.css" rel="stylesheet" />
+    <link rel="serviceWorker" href="/serviceWorker.js" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker
+          .register("/serviceWorker.js")
+          .then((registration) => {
+            console.log(
+              "Service worker detected and launched!",
+              registration.scope
+            );
+          })
+          .catch((error) => {
+            console.error(
+              "Service worker is not detected. Failed to load script.",
+              error
+            );
+          });
+      }
+    </script>
   </body>
 </html>
