@@ -9,6 +9,7 @@ addEventListener("activate", () => {
   console.log("Service worker is activated...");
 });
 
+// Triggers when browser needs recource
 addEventListener("fetch", (fetchEvent) => {
   const request = fetchEvent.request;
   console.log(request);
@@ -26,4 +27,20 @@ addEventListener("fetch", (fetchEvent) => {
         })
     );
   }
+});
+
+// Triggers when service worker firstly downloads
+addEventListener("install", (installEvent) => {
+  // Populate static cache
+  installEvent.waitUntil(
+    caches.open(staticCacheName).then((staticCache) => {
+      // Nice to have
+      // fonts, pictures
+      staticCache.addAll([]);
+
+      // Must have
+      // css, js
+      return staticCache.addAll([]);
+    })
+  );
 });
