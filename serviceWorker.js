@@ -1,12 +1,31 @@
-// Console logs for debugging
-console.log("log from service worker");
-
-addEventListener("install", () => {
-  console.log("Service worker is installing...");
-});
-
 addEventListener("activate", () => {
   console.log("Service worker is activated...");
+});
+
+// Triggers when service worker firstly downloads
+addEventListener("install", (installEvent) => {
+  console.log("Service worker is installing...");
+
+  const cacheVersion = "V0.01";
+  const staticCacheName = "staticFiles";
+
+  // Old sw changes to new one
+  // in  life cycle waiting stage: download, install, wait (here), activate
+  // Same as "update on reload" checkbox in chrome dev tools
+  skipWaiting();
+
+  // Populate static cache
+  installEvent.waitUntil(
+    caches.open(staticCacheName).then((staticCache) => {
+      // Nice to have
+      // fonts, pictures
+      staticCache.addAll([]);
+
+      // Must have
+      // css, js
+      return staticCache.addAll([]);
+    })
+  );
 });
 
 // Triggers when browser needs recource
@@ -35,20 +54,4 @@ addEventListener("fetch", (fetchEvent) => {
       })
     );
   }
-});
-
-// Triggers when service worker firstly downloads
-addEventListener("install", (installEvent) => {
-  // Populate static cache
-  installEvent.waitUntil(
-    caches.open(staticCacheName).then((staticCache) => {
-      // Nice to have
-      // fonts, pictures
-      staticCache.addAll([]);
-
-      // Must have
-      // css, js
-      return staticCache.addAll([]);
-    })
-  );
 });
