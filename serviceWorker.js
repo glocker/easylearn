@@ -1,13 +1,32 @@
-addEventListener("activate", () => {
+addEventListener("activate", (activateEvent) => {
   console.log("Service worker is activated...");
+
+  activateEvent.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => {
+        // Delete old cache
+        const freshCache = cacheNames.map((cacheName) => {
+          if (cacheName != staticCacheName) {
+            return caches.delete(cacheName);
+          }
+        });
+
+        // Use new cache
+        return Promise.all(freshCache);
+      })
+      .then(() => {
+        return clients.claim();
+      })
+  );
 });
 
 // Triggers when service worker firstly downloads
 addEventListener("install", (installEvent) => {
   console.log("Service worker is installing...");
 
-  const cacheVersion = "V0.01";
-  const staticCacheName = "staticFiles";
+  const cacheVersion = "v0.01";
+  const staticCacheName = "staticFiles" + cacheVersion;
 
   // Old sw changes to new one
   // in  life cycle waiting stage: download, install, wait (here), activate
@@ -23,7 +42,7 @@ addEventListener("install", (installEvent) => {
 
       // Must have
       // css, js
-      return staticCache.addAll([]);
+      return staticCache.addAll(["/src/main.tsx"]);
     })
   );
 });
