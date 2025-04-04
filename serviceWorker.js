@@ -42,7 +42,7 @@ addEventListener("install", (installEvent) => {
 
       // Must have
       // css, js
-      return staticCache.addAll(["/src/main.tsx"]);
+      return staticCache.addAll(["/src/main.tsx", "/src/offline.html"]);
     })
   );
 });
@@ -64,11 +64,7 @@ addEventListener("fetch", (fetchEvent) => {
         return fetch(request)
           .then((fetchResponse) => fetchResponse)
           .catch((error) => {
-            return new Response("<h1>Oops!</h1><p>Failure to fetch data</p>", {
-              headers: {
-                "Content-type": "text/html; charset=utf-8",
-              },
-            });
+            return caches.match("/src/offline.html");
           });
       })
     );
