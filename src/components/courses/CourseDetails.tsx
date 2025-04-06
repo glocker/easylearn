@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Course } from "../../types/Course";
 import { CardCreator } from "../cards/CardCreator";
+import { PlayIcon } from "@heroicons/react/24/solid";
 
 export const CourseDetails = () => {
   const { courseId } = useParams<{ courseId: string }>();
@@ -69,53 +70,64 @@ export const CourseDetails = () => {
   }
 
   return (
-    <div className="container mx-auto max-w-4xl">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl font-light text-gray-800 mb-4">
-          {course.title}
-        </h1>
-        <p className="text-gray-600 mb-4">{course.description}</p>
-        <span className="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm">
-          {course.category}
-        </span>
-      </div>
+    <div className="min-h-screen bg-gray-900">
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-100">{course.title}</h1>
 
-      <div className="mb-12">
-        <CardCreator courseId={course.id} onCardCreated={handleCardCreated} />
-      </div>
+          <Link
+            to={`/courses/${course.id}/play`}
+            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
+          >
+            <PlayIcon className="h-5 w-5" />
+            <span>Start Learning</span>
+          </Link>
+        </div>
 
-      <div className="mt-12">
-        <h2 className="text-2xl font-light text-gray-800 mb-6 text-center">
-          Cards ({course.cards.length})
-        </h2>
+        <div className="text-center mb-12">
+          <p className="text-gray-600 mb-4">{course.description}</p>
+          <span className="inline-block px-4 py-2 bg-blue-50 text-blue-600 rounded-full text-sm">
+            {course.category}
+          </span>
+        </div>
 
-        {course.cards.length === 0 ? (
-          <div className="text-center text-gray-500">
-            No cards yet. Create your first card!
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {course.cards.map((card, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg shadow-sm border border-gray-100 p-6"
-              >
-                <div className="mb-4">
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">
-                    Question:
-                  </h3>
-                  <p className="text-gray-800">{card.question}</p>
+        <div className="mb-12">
+          <CardCreator courseId={course.id} onCardCreated={handleCardCreated} />
+        </div>
+
+        <div className="mt-12">
+          <h2 className="text-2xl font-light text-gray-800 mb-6 text-center">
+            Cards ({course.cards.length})
+          </h2>
+
+          {course.cards.length === 0 ? (
+            <div className="text-center text-gray-500">
+              No cards yet. Create your first card!
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {course.cards.map((card, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-sm border border-gray-100 p-6"
+                >
+                  <div className="mb-4">
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">
+                      Question:
+                    </h3>
+                    <p className="text-gray-800">{card.question}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-500 mb-2">
+                      Answer:
+                    </h3>
+                    <p className="text-gray-800">{card.answer}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-2">
-                    Answer:
-                  </h3>
-                  <p className="text-gray-800">{card.answer}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

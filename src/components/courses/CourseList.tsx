@@ -208,6 +208,18 @@ export const CourseList = () => {
           ))}
         </div>
       )}
+
+      <div className="mt-8">
+        {filteredCourses.map((course) => (
+          <Link
+            key={course.id}
+            to={`/courses/${course.id}/play`}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
+          >
+            Start Learning
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };
