@@ -11,6 +11,7 @@ import {
 import { db } from "../../utils/firebase";
 import { Course } from "../../types/Course";
 import { CreateCourseForm } from "./CreateCourseForm";
+import { PlayIcon } from "@heroicons/react/24/solid";
 
 export const CourseList = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -189,9 +190,21 @@ export const CourseList = () => {
             >
               <div className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    {course.title}
-                  </h3>
+                  <div className="mt-4 flex items-center justify-between">
+                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                      {course.title}
+                    </h3>
+                    <Link
+                      key={course.id}
+                      to={`/courses/${course.id}/play`}
+                      className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
+                    >
+                      <div className="flex items-center justify-between">
+                        <PlayIcon className="h-5 w-5" />
+                        <span>Learn</span>
+                      </div>
+                    </Link>
+                  </div>
                   <p className="mt-2 text-gray-600">{course.description}</p>
 
                   <div className="mt-4 flex items-center justify-between">
@@ -208,18 +221,6 @@ export const CourseList = () => {
           ))}
         </div>
       )}
-
-      <div className="mt-8">
-        {filteredCourses.map((course) => (
-          <Link
-            key={course.id}
-            to={`/courses/${course.id}/play`}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-500"
-          >
-            Start Learning
-          </Link>
-        ))}
-      </div>
     </div>
   );
 };

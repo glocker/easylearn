@@ -77,10 +77,12 @@ export const CourseDetails = () => {
 
           <Link
             to={`/courses/${course.id}/play`}
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
+            className="inline-flex items-center px-4 py-2 bg-green-300 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
           >
-            <PlayIcon className="h-5 w-5" />
-            <span>Start Learning</span>
+            <div className="flex items-center justify-between">
+              <PlayIcon className="h-5 w-5" />
+              <span>Learn</span>
+            </div>
           </Link>
         </div>
 
