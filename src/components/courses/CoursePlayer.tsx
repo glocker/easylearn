@@ -5,6 +5,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Link } from "react-router-dom";
 import { Course } from "../../types/Course";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export const CoursePlayer = () => {
   const { courseId } = useParams();
@@ -13,6 +14,7 @@ export const CoursePlayer = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showAllFlipped, setShowAllFlipped] = useState(false);
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -79,17 +81,31 @@ export const CoursePlayer = () => {
     }
   };
 
+  const handleFlipAll = () => {
+    setShowAllFlipped(!showAllFlipped);
+    setIsFlipped(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Navigation */}
       <nav className="bg-gray-800 p-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
-          <Link
-            to={`/courses/${courseId}`}
-            className="text-gray-200 hover:text-white"
-          >
-            ← Back to Course
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              to={`/courses/${courseId}`}
+              className="text-gray-200 hover:text-white"
+            >
+              ← Back to Course
+            </Link>
+            <button
+              onClick={handleFlipAll}
+              className="inline-flex items-center px-3 py-2 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 gap-2"
+            >
+              <ArrowPathIcon className="h-5 w-5" />
+              <span>Flip all</span>
+            </button>
+          </div>
           <h1 className="text-xl font-bold text-white">{course.title}</h1>
           <span className="text-gray-200">
             {currentCardIndex + 1} / {course.cards.length}
@@ -111,7 +127,10 @@ export const CoursePlayer = () => {
               <div
                 className="bg-gray-800 rounded-xl p-8 shadow-lg cursor-pointer transform transition-transform duration-500 perspective-1000"
                 style={{
-                  transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+                  transform:
+                    isFlipped || showAllFlipped
+                      ? "rotateY(180deg)"
+                      : "rotateY(0deg)",
                   transformStyle: "preserve-3d",
                 }}
                 onClick={() => setIsFlipped(!isFlipped)}
@@ -119,7 +138,7 @@ export const CoursePlayer = () => {
                 <div
                   className="backface-hidden"
                   style={{
-                    opacity: isFlipped ? 0 : 1,
+                    opacity: isFlipped || showAllFlipped ? 0 : 1,
                     transition: "opacity 0.15s ease-in-out",
                   }}
                 >
@@ -131,7 +150,7 @@ export const CoursePlayer = () => {
                   className="backface-hidden absolute inset-0 p-8"
                   style={{
                     transform: "rotateY(180deg)",
-                    opacity: isFlipped ? 1 : 0,
+                    opacity: isFlipped || showAllFlipped ? 1 : 0,
                     transition: "opacity 0.15s ease-in-out",
                   }}
                 >
