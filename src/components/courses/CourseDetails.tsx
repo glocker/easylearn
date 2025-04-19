@@ -70,14 +70,14 @@ export const CourseDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-100">{course.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
 
           <Link
             to={`/courses/${course.id}/play`}
-            className="inline-flex items-center px-4 py-2 bg-green-300 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
+            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
           >
             <div className="flex items-center justify-between">
               <PlayIcon className="h-5 w-5" />
@@ -93,12 +93,12 @@ export const CourseDetails = () => {
           </span>
         </div>
 
-        <div className="mb-12">
+        <div className="mb-12 flex justify-center w-full">
           <CardCreator courseId={course.id} onCardCreated={handleCardCreated} />
         </div>
 
         <div className="mt-12">
-          <h2 className="text-2xl font-light text-gray-800 mb-6 text-center">
+          <h2 className="text-2xl font-light text-gray-900 mb-6 text-center">
             Cards ({course.cards.length})
           </h2>
 
@@ -111,19 +111,19 @@ export const CourseDetails = () => {
               {course.cards.map((card, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-lg shadow-sm border border-gray-100 p-6"
+                  className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow"
                 >
                   <div className="mb-4">
                     <h3 className="text-sm font-medium text-gray-500 mb-2">
                       Question:
                     </h3>
-                    <p className="text-gray-800">{card.question}</p>
+                    <p className="text-gray-900">{card.question}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 mb-2">
                       Answer:
                     </h3>
-                    <p className="text-gray-800">{card.answer}</p>
+                    <p className="text-gray-900">{card.answer}</p>
                   </div>
                 </div>
               ))}
