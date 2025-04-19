@@ -172,7 +172,7 @@ export const CoursePlayer = () => {
           <button
             onClick={handlePrevCard}
             disabled={currentCardIndex === 0}
-            className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200 border border-gray-200"
+            className="px-6 py-2 bg-gray-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-600"
           >
             Previous
           </button>

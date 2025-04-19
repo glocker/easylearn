@@ -77,7 +77,7 @@ export const CourseDetails = () => {
 
           <Link
             to={`/courses/${course.id}/play`}
-            className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
+            className="inline-flex items-center px-4 py-2 bg-green-300 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
           >
             <div className="flex items-center justify-between">
               <PlayIcon className="h-5 w-5" />
@@ -115,13 +115,13 @@ export const CourseDetails = () => {
                 >
                   <div className="mb-4">
                     <h3 className="text-sm font-medium text-gray-500 mb-2">
-                      Question:
+                      Front side:
                     </h3>
                     <p className="text-gray-900">{card.question}</p>
                   </div>
                   <div>
                     <h3 className="text-sm font-medium text-gray-500 mb-2">
-                      Answer:
+                      Back side:
                     </h3>
                     <p className="text-gray-900">{card.answer}</p>
                   </div>

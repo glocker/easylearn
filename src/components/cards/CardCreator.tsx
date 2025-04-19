@@ -26,7 +26,7 @@ export const CardCreator = ({ courseId, onCardCreated }: CardCreatorProps) => {
 
     // Validation
     if (!card.question.trim() || !card.answer.trim()) {
-      setError("Both question and answer are required");
+      setError("Both front side and back side are required");
       return;
     }
 
@@ -71,27 +71,27 @@ export const CardCreator = ({ courseId, onCardCreated }: CardCreatorProps) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
-              Question
+              Front side
             </label>
             <textarea
               value={card.question}
               onChange={(e) => setCard({ ...card, question: e.target.value })}
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               rows={3}
-              placeholder="Enter your question here..."
+              placeholder="Type text here..."
             />
           </div>
 
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2">
-              Answer
+              Back side
             </label>
             <textarea
               value={card.answer}
               onChange={(e) => setCard({ ...card, answer: e.target.value })}
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
               rows={3}
-              placeholder="Enter the answer here..."
+              placeholder="Type text here..."
             />
           </div>
 
