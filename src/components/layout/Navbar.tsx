@@ -1,8 +1,31 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import {
+  TrophyIcon,
+  Cog6ToothIcon,
+  MoonIcon,
+  ArrowRightOnRectangleIcon,
+  QuestionMarkCircleIcon,
+  ShieldCheckIcon,
+  CreditCardIcon,
+} from "@heroicons/react/24/outline";
+import reactLogo from "../../assets/react.svg";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsProfileOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
@@ -52,6 +75,112 @@ export const Navbar = () => {
                 )}
               </svg>
             </button>
+          </div>
+
+          <div className="flex items-center gap-4">
+            {/* Profile Menu */}
+            <div className="relative">
+              <button
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="flex items-center"
+              >
+                <img
+                  src={reactLogo}
+                  alt="Profile"
+                  className="w-8 h-8 rounded-full"
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              {isProfileOpen && (
+                <div
+                  ref={menuRef}
+                  className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50"
+                >
+                  {/* User Info */}
+                  <div className="px-4 py-3 border-b border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={reactLogo}
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <div>
+                        <div className="font-medium text-gray-900">admin</div>
+                        <div className="text-sm text-gray-500">
+                          admin@admin.com
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="py-2">
+                    <Link
+                      to="/achievements"
+                      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    >
+                      <TrophyIcon className="w-5 h-5" />
+                      <span>Achievements</span>
+                    </Link>
+
+                    <Link
+                      to="/settings"
+                      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    >
+                      <Cog6ToothIcon className="w-5 h-5" />
+                      <span>Settings</span>
+                    </Link>
+
+                    <button className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50">
+                      <MoonIcon className="w-5 h-5" />
+                      <span>Dark theme</span>
+                    </button>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-gray-100"></div>
+
+                  {/* Additional Links */}
+                  <div className="py-2">
+                    <Link
+                      to="/subscribe"
+                      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    >
+                      <CreditCardIcon className="w-5 h-5" />
+                      <span>Subscribe</span>
+                    </Link>
+
+                    <Link
+                      to="/privacy"
+                      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    >
+                      <ShieldCheckIcon className="w-5 h-5" />
+                      <span>Privacy Policy</span>
+                    </Link>
+
+                    <Link
+                      to="/help"
+                      className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    >
+                      <QuestionMarkCircleIcon className="w-5 h-5" />
+                      <span>Help and Feedback</span>
+                    </Link>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="border-t border-gray-100"></div>
+
+                  {/* Logout */}
+                  <div className="py-2">
+                    <button className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50">
+                      <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                      <span>Sign out</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
