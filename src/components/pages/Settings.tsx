@@ -12,6 +12,9 @@ import {
   fetchUserCourses,
   updateCourseNotifications,
   Course,
+  getUserProfile,
+  updateUserProfile,
+  UserProfile,
 } from "../../utils/firebase";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -57,7 +60,7 @@ export const Settings = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [courseNotifications, setCourseNotifications] = useState<
     Record<string, boolean>
@@ -101,6 +104,23 @@ export const Settings = () => {
     };
   }, [courses.length, isLoading]);
 
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      if (!user?.uid) return;
+
+      const profile = await getUserProfile(user.uid);
+      if (profile) {
+        setTheme(profile.settings.theme);
+        setLanguage(profile.settings.language);
+        setTimezone(profile.settings.timezone);
+        setNotificationTime(profile.settings.notifications.studyReminders);
+        setAccountType(profile.accountType);
+      }
+    };
+
+    loadUserProfile();
+  }, [user?.uid]);
+
   const handleCourseNotificationToggle = async (courseId: string) => {
     if (!user?.uid) return;
 
@@ -136,29 +156,11 @@ export const Settings = () => {
   };
 
   const fetchCourses = async () => {
-    if (!user?.uid) {
-      setError("Please sign in to view your courses");
-      return;
-    }
-
     setIsLoading(true);
-    setError(null);
-
     try {
-      const userCourses = await fetchUserCourses(user.uid);
+      const userCourses = await fetchUserCourses();
       setCourses(userCourses);
-
-      // Initialize notification settings
-      const notificationSettings = userCourses.reduce(
-        (acc, course) => ({
-          ...acc,
-          [course.id]: course.notificationsEnabled || false,
-        }),
-        {}
-      );
-      setCourseNotifications(notificationSettings);
     } catch (error) {
-      setError("Failed to load courses. Please try again later.");
       console.error("Failed to fetch courses:", error);
     } finally {
       setIsLoading(false);
@@ -182,6 +184,26 @@ export const Settings = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const updateSettings = async (updates: Partial<UserProfile["settings"]>) => {
+    if (!user?.uid) return;
+
+    try {
+      await updateUserProfile(user.uid, {
+        settings: updates,
+        updatedAt: Date.now(),
+      });
+    } catch (error) {
+      console.error("Failed to update settings:", error);
+    }
+  };
+
+  const handleThemeChange = async (newTheme: string) => {
+    setTheme(newTheme);
+    await updateSettings({
+      theme: newTheme as UserProfile["settings"]["theme"],
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
@@ -331,7 +353,7 @@ export const Settings = () => {
                       <button
                         key={themeOption.id}
                         onClick={() => {
-                          setTheme(themeOption.id);
+                          handleThemeChange(themeOption.id);
                           setIsDropdownOpen((prev) => ({
                             ...prev,
                             theme: false,
@@ -441,9 +463,11 @@ export const Settings = () => {
 
             {/* Course Notifications Section */}
             <div id="courses-section" className="mb-8">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">
-                Course Updates
-              </h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-lg font-medium text-gray-900">
+                  Course Updates
+                </h2>
+              </div>
               {isLoading ? (
                 <div className="flex items-center justify-center p-4">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>

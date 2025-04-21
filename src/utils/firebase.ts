@@ -6,6 +6,7 @@ import {
   getDocs,
   setDoc,
   doc,
+  getDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -31,41 +32,20 @@ export interface Course {
   description?: string;
   category?: string;
   notificationsEnabled?: boolean;
+  cards: any[]; // Assuming 'cards' is of type 'any[]'
 }
 
-export const fetchUserCourses = async (userId: string): Promise<Course[]> => {
+export const fetchUserCourses = async (): Promise<Course[]> => {
   try {
-    // Firstly get all courses
     const coursesRef = collection(db, "courses");
     const coursesSnapshot = await getDocs(coursesRef);
 
-    // Then get user's course settings
-    const userCoursesRef = collection(db, "users", userId, "courseSettings");
-    const userCoursesSnapshot = await getDocs(userCoursesRef);
-
-    // Create a map of user's course settings
-    const userCourseSettings = new Map(
-      userCoursesSnapshot.docs.map((doc) => [
-        doc.id,
-        { notificationsEnabled: doc.data().notificationsEnabled },
-      ])
-    );
-
-    // Combine course data with user settings
-    const courses = coursesSnapshot.docs.map((doc) => {
-      const courseData = doc.data();
-      const userSettings = userCourseSettings.get(doc.id);
-
-      return {
-        id: doc.id,
-        title: courseData.title,
-        description: courseData.description,
-        category: courseData.category,
-        notificationsEnabled: userSettings?.notificationsEnabled ?? false,
-      };
-    });
-
-    return courses;
+    return coursesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      title: doc.data().title,
+      description: doc.data().description,
+      category: doc.data().category,
+    }));
   } catch (error) {
     console.error("Error fetching courses:", error);
     return [];
@@ -91,5 +71,60 @@ export const updateCourseNotifications = async (
   } catch (error) {
     console.error("Error updating course notifications:", error);
     return false;
+  }
+};
+
+interface UserProfile {
+  uid: string;
+  email: string;
+  username: string;
+  accountType: "Student" | "Teacher";
+  settings: {
+    theme: "auto" | "light" | "dark";
+    language: "en" | "de" | "ru";
+    timezone: string;
+    notifications: {
+      studyReminders: string; // time in format "HH:00"
+    };
+  };
+  createdAt: number;
+  updatedAt: number;
+}
+
+// Function to create/update user profile
+export const updateUserProfile = async (
+  userId: string,
+  profileData: Partial<UserProfile>
+) => {
+  try {
+    const userRef = doc(db, "users", userId);
+    await setDoc(
+      userRef,
+      {
+        ...profileData,
+        updatedAt: Date.now(),
+      },
+      { merge: true }
+    );
+
+    return true;
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    return false;
+  }
+};
+
+// Function to get user profile
+export const getUserProfile = async (
+  userId: string
+): Promise<UserProfile | null> => {
+  try {
+    const userDoc = await getDoc(doc(db, "users", userId));
+    if (!userDoc.exists()) return null;
+
+    return userDoc.data() as UserProfile;
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    return null;
   }
 };
