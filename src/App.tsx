@@ -8,6 +8,7 @@ import { Layout } from "./components/layout/Layout";
 import { CourseList } from "./components/courses/CourseList";
 import { CourseDetails } from "./components/courses/CourseDetails";
 import { CoursePlayer } from "./components/courses/CoursePlayer";
+import { Settings } from "./components/pages/Settings";
 
 // Create a wrapper component for CoursePlayer to handle params
 const CoursePlayerWrapper = () => {
@@ -31,6 +32,7 @@ function App() {
             path="/courses/:courseId/play"
             element={<CoursePlayerWrapper />}
           />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Layout>
     </Router>
