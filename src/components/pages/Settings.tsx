@@ -7,6 +7,7 @@ import {
   SunIcon,
   MoonIcon,
   ComputerDesktopIcon,
+  GlobeAltIcon,
 } from "@heroicons/react/24/outline";
 import {
   fetchUserCourses,
@@ -73,6 +74,9 @@ export const Settings = () => {
     notification: false,
     timezone: false,
   });
+
+  const [showRealName, setShowRealName] = useState(false);
+  const [showInSearch, setShowInSearch] = useState(false);
 
   useEffect(() => {
     const coursesSection = document.getElementById("courses-section");
@@ -556,6 +560,85 @@ export const Settings = () => {
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Account and Privacy Section */}
+        <div className="mt-8">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-8">
+            Account and Privacy
+          </h1>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 space-y-8">
+            {/* Password Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-4">
+                Create EasyLearn Password
+              </h2>
+              <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-700">
+                Create
+              </button>
+            </div>
+
+            {/* Google Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-4">
+                Connect Google Account
+              </h2>
+              <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
+                <GlobeAltIcon className="w-5 h-5 text-blue-500" />
+                Connect Google
+              </button>
+            </div>
+
+            {/* Privacy Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-4">
+                Privacy
+              </h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-700">
+                    Show your real name in EasyLearn
+                  </span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={showRealName}
+                      onChange={(e) => setShowRealName(e.target.checked)}
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-700">
+                    Show your profile in Google search results
+                  </span>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={showInSearch}
+                      onChange={(e) => setShowInSearch(e.target.checked)}
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Account Deletion Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-2">
+                Delete Account
+              </h2>
+              <p className="text-gray-600 mb-4">
+                All your data will be deleted and this action cannot be undone.
+              </p>
+              <button className="px-6 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700">
+                Delete Account
+              </button>
             </div>
           </div>
         </div>
