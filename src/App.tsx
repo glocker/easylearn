@@ -9,6 +9,7 @@ import { CourseList } from "./components/courses/CourseList";
 import { CourseDetails } from "./components/courses/CourseDetails";
 import { CoursePlayer } from "./components/courses/CoursePlayer";
 import { Settings } from "./components/pages/Settings";
+import { AuthProvider } from "./contexts/AuthContext";
 
 // Create a wrapper component for CoursePlayer to handle params
 const CoursePlayerWrapper = () => {
@@ -23,19 +24,21 @@ const CoursePlayerWrapper = () => {
 
 function App() {
   return (
-    <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<CourseList />} />
-          <Route path="/courses/:courseId" element={<CourseDetails />} />
-          <Route
-            path="/courses/:courseId/play"
-            element={<CoursePlayerWrapper />}
-          />
-          <Route path="/settings" element={<Settings />} />
-        </Routes>
-      </Layout>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<CourseList />} />
+            <Route path="/courses/:courseId" element={<CourseDetails />} />
+            <Route
+              path="/courses/:courseId/play"
+              element={<CoursePlayerWrapper />}
+            />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
   );
 }
 

@@ -8,11 +8,12 @@ import {
   MoonIcon,
   ComputerDesktopIcon,
 } from "@heroicons/react/24/outline";
-
-interface Course {
-  id: string;
-  title: string;
-}
+import {
+  fetchUserCourses,
+  updateCourseNotifications,
+  Course,
+} from "../../utils/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 
 const LANGUAGES = [
   { code: "en", label: "English" },
@@ -56,6 +57,11 @@ export const Settings = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const { user } = useAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [courseNotifications, setCourseNotifications] = useState<
+    Record<string, boolean>
+  >({});
 
   const [isDropdownOpen, setIsDropdownOpen] = useState({
     accountType: false,
@@ -95,21 +101,70 @@ export const Settings = () => {
     };
   }, [courses.length, isLoading]);
 
-  const fetchCourses = async () => {
-    setIsLoading(true);
+  const handleCourseNotificationToggle = async (courseId: string) => {
+    if (!user?.uid) return;
+
+    const newEnabled = !courseNotifications[courseId];
+
+    // Optimistic update
+    setCourseNotifications((prev) => ({
+      ...prev,
+      [courseId]: newEnabled,
+    }));
+
     try {
-      // Api call
-      const response = await fetch("/api/courses");
-      const data = await response.json();
-      setCourses(data);
+      const success = await updateCourseNotifications(
+        user.uid,
+        courseId,
+        newEnabled
+      );
+      if (!success) {
+        // Revert on failure
+        setCourseNotifications((prev) => ({
+          ...prev,
+          [courseId]: !newEnabled,
+        }));
+      }
     } catch (error) {
+      console.error("Failed to update notification settings:", error);
+      // Revert on error
+      setCourseNotifications((prev) => ({
+        ...prev,
+        [courseId]: !newEnabled,
+      }));
+    }
+  };
+
+  const fetchCourses = async () => {
+    if (!user?.uid) {
+      setError("Please sign in to view your courses");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const userCourses = await fetchUserCourses(user.uid);
+      setCourses(userCourses);
+
+      // Initialize notification settings
+      const notificationSettings = userCourses.reduce(
+        (acc, course) => ({
+          ...acc,
+          [course.id]: course.notificationsEnabled || false,
+        }),
+        {}
+      );
+      setCourseNotifications(notificationSettings);
+    } catch (error) {
+      setError("Failed to load courses. Please try again later.");
       console.error("Failed to fetch courses:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Click handler outside dropdowns
   const handleClickOutside = (event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (!target.closest(".dropdown-container")) {
@@ -134,6 +189,8 @@ export const Settings = () => {
         <h1 className="text-2xl font-semibold text-gray-900 mb-8">
           Personal Information
         </h1>
+
+        {error && <div className="text-red-600 mb-4">{error}</div>}
 
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           {/* Profile Photo Section */}
@@ -391,20 +448,45 @@ export const Settings = () => {
                 <div className="flex items-center justify-center p-4">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                 </div>
-              ) : (
+              ) : courses.length > 0 ? (
                 <div className="space-y-4">
                   {courses.map((course) => (
                     <div
                       key={course.id}
-                      className="flex items-center justify-between"
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
                     >
-                      <span className="text-gray-700">{course.title}</span>
+                      <div className="flex flex-col">
+                        <span className="text-gray-900 font-medium">
+                          {course.title}
+                        </span>
+                        {course.description && (
+                          <span className="text-gray-500 text-sm">
+                            {course.description}
+                          </span>
+                        )}
+                        {course.category && (
+                          <span className="text-gray-500 text-xs">
+                            {course.category}
+                          </span>
+                        )}
+                      </div>
                       <label className="relative inline-flex items-center cursor-pointer">
-                        <input type="checkbox" className="sr-only peer" />
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={courseNotifications[course.id] || false}
+                          onChange={() =>
+                            handleCourseNotificationToggle(course.id)
+                          }
+                        />
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                       </label>
                     </div>
                   ))}
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 py-4">
+                  No courses available
                 </div>
               )}
             </div>
@@ -458,10 +540,8 @@ export const Settings = () => {
   );
 };
 
-// Helper functions
 function getCitiesForTimezone(offset: number): string[] {
-  // Here should be a real list of cities for each timezone
-  const timezoneMap = {
+  const timezoneMap: Record<string, string[]> = {
     "-12": ["Baker Island"],
     "-11": ["Pago Pago"],
     "-10": ["Honolulu"],
