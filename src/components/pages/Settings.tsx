@@ -52,6 +52,13 @@ const avatars = [
 ];
 
 export const Settings = () => {
+  const { user } = useAuth();
+
+  if (!user) {
+    window.location.href = "/auth/signin";
+    return null;
+  }
+
   const [selectedAvatar, setSelectedAvatar] = useState(0);
   const [accountType, setAccountType] = useState("Student");
   const [theme, setTheme] = useState("auto");
@@ -61,7 +68,6 @@ export const Settings = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const { user, loading } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [courseNotifications, setCourseNotifications] = useState<
     Record<string, boolean>

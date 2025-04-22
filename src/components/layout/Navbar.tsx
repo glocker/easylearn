@@ -10,11 +10,13 @@ import {
   CreditCardIcon,
 } from "@heroicons/react/24/outline";
 import reactLogo from "../../assets/react.svg";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { signOut } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -26,6 +28,11 @@ export const Navbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSignOut = () => {
+    signOut();
+    window.location.href = "/auth/signin";
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
@@ -173,7 +180,10 @@ export const Navbar = () => {
 
                   {/* Logout */}
                   <div className="py-2">
-                    <button className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50">
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                    >
                       <ArrowRightOnRectangleIcon className="w-5 h-5" />
                       <span>Sign out</span>
                     </button>
