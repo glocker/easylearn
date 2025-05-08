@@ -5,7 +5,7 @@ import { CourseDetails } from "./components/courses/CourseDetails";
 import { CoursePlayer } from "./components/courses/CoursePlayer";
 import { Settings } from "./components/pages/Settings";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import { SignIn } from "./components/auth/SignIn";
+import { LoginForm } from "./components/auth/LoginForm";
 import { Navbar } from "./components/layout/NavBar";
 
 // Protected route - redirects to login if user is not authenticated
@@ -51,7 +51,7 @@ export const App = () => {
                 path="/auth/signin"
                 element={
                   <PublicRoute>
-                    <SignIn />
+                    <LoginForm />
                   </PublicRoute>
                 }
               />

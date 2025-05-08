@@ -12,8 +12,8 @@ export const LoginForm = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      setError("Log in error. Check email and password.");
+    } catch (err) {
+      setError(`Log in error: ${err.message}`);
     }
   };
 

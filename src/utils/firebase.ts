@@ -124,29 +124,12 @@ export const getUserProfile = async (
     const userDoc = await getDoc(doc(db, "users", userId));
     if (!userDoc.exists()) return null;
 
-    return userDoc.data() as UserProfile;
+    return {
+      uid: userDoc.id,
+      ...userDoc.data(),
+    } as UserProfile;
   } catch (error) {
     console.error("Error fetching user profile:", error);
-    return null;
-  }
-};
-
-export const signInWithPassword = async (password: string) => {
-  try {
-    const usersRef = collection(db, "users");
-    const q = query(usersRef, where("password", "==", password));
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-      const userDoc = querySnapshot.docs[0];
-      return {
-        uid: userDoc.id,
-        ...userDoc.data(),
-      };
-    }
-    return null;
-  } catch (error) {
-    console.error("Error signing in:", error);
     return null;
   }
 };
