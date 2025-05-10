@@ -46,9 +46,29 @@ const TIMEZONES = Array.from({ length: 25 }, (_, i) => ({
   cities: getCitiesForTimezone(i - 12), // Returns cities for the given timezone
 }));
 
+const AVATAR_URL: string = "https://api.dicebear.com/9.x/dylan/svg?seed=";
+
 const avatars = [
-  { id: 1, icon: <UserCircleIcon className="w-12 h-12 text-blue-500" /> },
-  // Add more avatars if needed
+  { id: 0, seed: "Sawyer" },
+  { id: 1, seed: "Amaya" },
+  { id: 2, seed: "George" },
+  { id: 3, seed: "Aidan" },
+  { id: 4, seed: "Alexander" },
+  { id: 5, seed: "Liam" },
+  { id: 6, seed: "Aiden" },
+  { id: 7, seed: "Oliver" },
+  { id: 8, seed: "Kingston" },
+  { id: 9, seed: "Sarah" },
+  { id: 10, seed: "Sadie" },
+  { id: 11, seed: "Avery" },
+  { id: 12, seed: "Leah" },
+  { id: 13, seed: "Brooklynn" },
+  { id: 14, seed: "Destiny" },
+  { id: 15, seed: "Brian" },
+  { id: 16, seed: "Ryan" },
+  { id: 17, seed: "Vivian" },
+  { id: 18, seed: "Wyatt" },
+  { id: 19, seed: "Adrian" },
 ];
 
 export const Settings = () => {
@@ -59,6 +79,8 @@ export const Settings = () => {
     return null;
   }
 
+  // TODO: State in db or zustand
+  const [avatar, setAvatar] = useState<string | null>(null);
   const [selectedAvatar, setSelectedAvatar] = useState(0);
   const [accountType, setAccountType] = useState("Student");
   const [theme, setTheme] = useState("auto");
@@ -125,6 +147,7 @@ export const Settings = () => {
         setTimezone(profile.settings.timezone);
         setNotificationTime(profile.settings.notifications.studyReminders);
         setAccountType(profile.accountType);
+        setAvatar(profile.settings.avatar);
       }
     };
 
@@ -215,6 +238,10 @@ export const Settings = () => {
     });
   };
 
+  const avatarUrl = avatar
+    ? `${AVATAR_URL}${encodeURIComponent(avatar)}`
+    : null;
+
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
       <div className="max-w-4xl mx-auto px-4 py-8">
@@ -231,9 +258,15 @@ export const Settings = () => {
               Profile Photo
             </h2>
             <div className="flex flex-wrap gap-4">
-              <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-2 border-blue-500">
-                {avatars[selectedAvatar]?.icon || (
-                  <UserCircleIcon className="w-12 h-12 text-blue-500" />
+              <div className="w-24 h-24 rounded-full flex items-center justify-center border-2 border-blue-500">
+                {avatarUrl && (
+                  <img
+                    src={avatarUrl}
+                    alt="Аватар"
+                    width={100}
+                    height={100}
+                    style={{ borderRadius: "50%" }}
+                  />
                 )}
               </div>
               <div className="grid grid-cols-5 gap-2">
@@ -241,17 +274,25 @@ export const Settings = () => {
                   <button
                     key={avatar.id}
                     onClick={() => setSelectedAvatar(index)}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center border ${
-                      selectedAvatar === index
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:bg-gray-50"
-                    }`}
+                    className={`w-24 h-24 flex items-center justify-center border rounded-full
+        ${
+          selectedAvatar === index
+            ? "border-blue-500"
+            : "border-gray-200 hover:border-gray-400"
+        }`}
+                    style={{ backgroundColor: "transparent" }}
                   >
-                    {avatar.icon}
+                    <img
+                      src={`${AVATAR_URL}${encodeURIComponent(avatar.seed)}`}
+                      alt={`Avatar ${avatar.seed}`}
+                      className="rounded-full"
+                      width={64}
+                      height={64}
+                    />
                   </button>
                 ))}
                 <button className="w-12 h-12 rounded-full flex items-center justify-center border border-dashed border-gray-300 hover:border-gray-400">
-                  <PlusIcon className="w-6 h-6 text-gray-400" />
+                  <PlusIcon className="w-12 h-12 text-gray-400" />
                 </button>
               </div>
             </div>
