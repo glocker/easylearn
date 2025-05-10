@@ -133,3 +133,18 @@ export const getUserProfile = async (
     return null;
   }
 };
+
+// Change user profile picture in settings
+export const updateUserAvatar = async (uid: string, seed: string) => {
+  const userRef = doc(db, "users", uid);
+
+  await setDoc(
+    userRef,
+    {
+      settings: {
+        avatar: seed,
+      },
+    },
+    { merge: true }
+  );
+};

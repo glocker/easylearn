@@ -16,6 +16,7 @@ import {
   getUserProfile,
   updateUserProfile,
   UserProfile,
+  updateUserAvatar,
 } from "../../utils/firebase";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -238,9 +239,24 @@ export const Settings = () => {
     });
   };
 
-  const avatarUrl = avatar
-    ? `${AVATAR_URL}${encodeURIComponent(avatar)}`
-    : null;
+  const handleAvatarChange = async (
+    uid: string,
+    seed: string,
+    index: number
+  ) => {
+    setSelectedAvatar(index);
+
+    if (!uid) return;
+
+    try {
+      await updateUserAvatar(uid, seed);
+      alert("Avatar successfully update!");
+    } catch (error) {
+      console.error("Error while updating avatar occured:", error);
+    }
+  };
+
+  const avatarUrl = avatar ? `${AVATAR_URL}${avatar}` : null;
 
   return (
     <div className="min-h-screen bg-gray-50 pt-16">
@@ -262,18 +278,20 @@ export const Settings = () => {
                 {avatarUrl && (
                   <img
                     src={avatarUrl}
-                    alt="Аватар"
+                    alt={`Avatar ${avatar}`}
                     width={100}
                     height={100}
                     style={{ borderRadius: "50%" }}
                   />
                 )}
               </div>
-              <div className="grid grid-cols-5 gap-2">
+              <div className="grid grid-cols-7 gap-2">
                 {avatars.map((avatar, index) => (
                   <button
                     key={avatar.id}
-                    onClick={() => setSelectedAvatar(index)}
+                    onClick={() =>
+                      handleAvatarChange(user.uid, avatar.seed, index)
+                    }
                     className={`w-24 h-24 flex items-center justify-center border rounded-full
         ${
           selectedAvatar === index
@@ -283,7 +301,7 @@ export const Settings = () => {
                     style={{ backgroundColor: "transparent" }}
                   >
                     <img
-                      src={`${AVATAR_URL}${encodeURIComponent(avatar.seed)}`}
+                      src={`${AVATAR_URL}${avatar.seed}`}
                       alt={`Avatar ${avatar.seed}`}
                       className="rounded-full"
                       width={64}
