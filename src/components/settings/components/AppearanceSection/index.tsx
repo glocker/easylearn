@@ -1,6 +1,6 @@
 import ThemeSelector from "./ThemeSelector";
 import LanguageSelector from "./LanguageSelector";
-import { UserProfile } from "../../../../../utils/firebase";
+import { UserProfile } from "../../../../utils/firebase";
 
 interface AppearanceSectionProps {
   theme: string;
@@ -20,7 +20,10 @@ const AppearanceSection = ({
       <h1 className="text-2xl font-semibold text-gray-900 mb-8">Appearance</h1>
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <ThemeSelector currentTheme={theme} onThemeChange={onThemeChange} />
-        <LanguageSelector currentLanguage={language} onLanguageChange={onLanguageChange} />
+        <LanguageSelector
+          currentLanguage={language}
+          onLanguageChange={onLanguageChange}
+        />
       </div>
     </div>
   );

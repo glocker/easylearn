@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import {
   getUserProfile,
   updateUserProfile,
   UserProfile,
-} from "../../../utils/firebase";
+} from "../../utils/firebase";
 import { getDefaultTimezone } from "./utils";
 
 // Import component sections
@@ -33,7 +33,7 @@ export const Settings = () => {
   const [notificationTime, setNotificationTime] = useState("08:00");
   const [timezone, setTimezone] = useState(getDefaultTimezone());
   const [error, setError] = useState<string | null>(null);
-  
+
   // Privacy settings
   const [showRealName, setShowRealName] = useState(false);
   const [showInSearch, setShowInSearch] = useState(false);

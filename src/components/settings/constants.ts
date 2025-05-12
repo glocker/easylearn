@@ -3,10 +3,16 @@ import {
   SunIcon,
   MoonIcon,
 } from "@heroicons/react/24/outline";
-import { ThemeOption, LanguageOption, TimezoneOption, AvatarOption } from "./types";
+import {
+  ThemeOption,
+  LanguageOption,
+  TimezoneOption,
+  AvatarOption,
+} from "./types";
 import { getCitiesForTimezone } from "./utils";
 
-export const AVATAR_URL: string = "https://api.dicebear.com/9.x/dylan/svg?seed=";
+export const AVATAR_URL: string =
+  "https://api.dicebear.com/9.x/dylan/svg?seed=";
 
 export const LANGUAGES: LanguageOption[] = [
   { code: "en", label: "English" },
@@ -18,7 +24,7 @@ export const THEMES: ThemeOption[] = [
   {
     id: "auto",
     icon: ComputerDesktopIcon,
-    label: "Auto"
+    label: "Auto",
   },
   { id: "light", icon: SunIcon, label: "Light" },
   { id: "dark", icon: MoonIcon, label: "Dark" },
@@ -29,11 +35,14 @@ export const NOTIFICATION_HOURS = Array.from(
   (_, i) => i.toString().padStart(2, "0") + ":00"
 );
 
-export const TIMEZONES: TimezoneOption[] = Array.from({ length: 25 }, (_, i) => ({
-  offset: i - 12,
-  label: `(GMT${i - 12 >= 0 ? "+" : ""}${i - 12}:00)`,
-  cities: getCitiesForTimezone(i - 12),
-}));
+export const TIMEZONES: TimezoneOption[] = Array.from(
+  { length: 25 },
+  (_, i) => ({
+    offset: i - 12,
+    label: `(GMT${i - 12 >= 0 ? "+" : ""}${i - 12}:00)`,
+    cities: getCitiesForTimezone(i - 12),
+  })
+);
 
 export const AVATARS: AvatarOption[] = [
   { id: 0, seed: "Sawyer" },

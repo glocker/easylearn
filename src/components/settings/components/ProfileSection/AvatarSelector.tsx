@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { AVATARS, AVATAR_URL } from "../../constants";
-import { updateUserAvatar } from "../../../../../utils/firebase";
+import { updateUserAvatar } from "../../../../utils/firebase";
 
 interface AvatarSelectorProps {
   userId: string;
@@ -12,7 +12,11 @@ const AvatarSelector = ({ userId, currentAvatar }: AvatarSelectorProps) => {
   const [selectedAvatar, setSelectedAvatar] = useState(0);
   const avatarUrl = currentAvatar ? `${AVATAR_URL}${currentAvatar}` : null;
 
-  const handleAvatarChange = async (uid: string, seed: string, index: number) => {
+  const handleAvatarChange = async (
+    uid: string,
+    seed: string,
+    index: number
+  ) => {
     setSelectedAvatar(index);
 
     if (!uid) return;
@@ -46,7 +50,11 @@ const AvatarSelector = ({ userId, currentAvatar }: AvatarSelectorProps) => {
               key={avatar.id}
               onClick={() => handleAvatarChange(userId, avatar.seed, index)}
               className={`w-24 h-24 flex items-center justify-center border rounded-full
-                ${selectedAvatar === index ? "border-blue-500" : "border-gray-200 hover:border-gray-400"}`}
+                ${
+                  selectedAvatar === index
+                    ? "border-blue-500"
+                    : "border-gray-200 hover:border-gray-400"
+                }`}
               style={{ backgroundColor: "transparent" }}
             >
               <img

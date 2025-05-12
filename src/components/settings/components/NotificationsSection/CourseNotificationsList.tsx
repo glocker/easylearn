@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
-import { Course, fetchUserCourses, updateCourseNotifications } from "../../../../../utils/firebase";
-import { useAuth } from "../../../../../contexts/AuthContext";
+import {
+  Course,
+  fetchUserCourses,
+  updateCourseNotifications,
+} from "../../../../utils/firebase";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 interface CourseNotificationsListProps {
   userId: string;
@@ -10,7 +14,9 @@ const CourseNotificationsList = ({ userId }: CourseNotificationsListProps) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInView, setIsInView] = useState(false);
-  const [courseNotifications, setCourseNotifications] = useState<Record<string, boolean>>({});
+  const [courseNotifications, setCourseNotifications] = useState<
+    Record<string, boolean>
+  >({});
 
   useEffect(() => {
     const coursesSection = document.getElementById("courses-section");
@@ -105,12 +111,18 @@ const CourseNotificationsList = ({ userId }: CourseNotificationsListProps) => {
               className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
             >
               <div className="flex flex-col">
-                <span className="text-gray-900 font-medium">{course.title}</span>
+                <span className="text-gray-900 font-medium">
+                  {course.title}
+                </span>
                 {course.description && (
-                  <span className="text-gray-500 text-sm">{course.description}</span>
+                  <span className="text-gray-500 text-sm">
+                    {course.description}
+                  </span>
                 )}
                 {course.category && (
-                  <span className="text-gray-500 text-xs">{course.category}</span>
+                  <span className="text-gray-500 text-xs">
+                    {course.category}
+                  </span>
                 )}
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -126,7 +138,9 @@ const CourseNotificationsList = ({ userId }: CourseNotificationsListProps) => {
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-500 py-4">No courses available</div>
+        <div className="text-center text-gray-500 py-4">
+          No courses available
+        </div>
       )}
     </div>
   );
