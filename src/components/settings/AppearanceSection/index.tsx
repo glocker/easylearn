@@ -1,6 +1,6 @@
 import ThemeSelector from "./ThemeSelector";
 import LanguageSelector from "./LanguageSelector";
-import { UserProfile } from "../../../../utils/firebase";
+import { UserProfile } from "../../../utils/firebase";
 
 interface AppearanceSectionProps {
   theme: string;

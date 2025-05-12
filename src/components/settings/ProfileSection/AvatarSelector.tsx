@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { AVATARS, AVATAR_URL } from "../../constants";
-import { updateUserAvatar } from "../../../../utils/firebase";
+import { AVATARS, AVATAR_URL } from "../constants";
+import { updateUserAvatar } from "../../../utils/firebase";
 
 interface AvatarSelectorProps {
   userId: string;

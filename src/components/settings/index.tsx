@@ -8,11 +8,11 @@ import {
 import { getDefaultTimezone } from "./utils";
 
 // Import component sections
-import ProfileSection from "./components/ProfileSection";
-import AppearanceSection from "./components/AppearanceSection";
-import NotificationsSection from "./components/NotificationsSection";
-import TimezoneSection from "./components/TimezoneSection";
-import AccountPrivacySection from "./components/AccountPrivacySection";
+import ProfileSection from "./ProfileSection";
+import AppearanceSection from "./AppearanceSection";
+import NotificationsSection from "./NotificationsSection";
+import TimezoneSection from "./TimezoneSection";
+import AccountPrivacySection from "./AccountPrivacySection";
 
 export const Settings = () => {
   const { user } = useAuth();

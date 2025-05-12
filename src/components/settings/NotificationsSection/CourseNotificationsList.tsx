@@ -3,8 +3,8 @@ import {
   Course,
   fetchUserCourses,
   updateCourseNotifications,
-} from "../../../../utils/firebase";
-import { useAuth } from "../../../../contexts/AuthContext";
+} from "../../../utils/firebase";
+import { useAuth } from "../../../contexts/AuthContext";
 
 interface CourseNotificationsListProps {
   userId: string;

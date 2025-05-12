@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { NOTIFICATION_HOURS } from "../../constants";
+import { NOTIFICATION_HOURS } from "../constants";
 
 interface StudyReminderTimePickerProps {
   notificationTime: string;
@@ -15,7 +15,9 @@ const StudyReminderTimePicker = ({
 
   return (
     <div className="mb-8">
-      <h2 className="text-lg font-medium text-gray-900 mb-4">Study Reminders</h2>
+      <h2 className="text-lg font-medium text-gray-900 mb-4">
+        Study Reminders
+      </h2>
       <div className="relative dropdown-container">
         <button
           onClick={() => setIsOpen(!isOpen)}

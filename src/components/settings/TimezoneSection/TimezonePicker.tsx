@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { TIMEZONES } from "../../constants";
+import { TIMEZONES } from "../constants";
 
 interface TimezonePickerProps {
   timezone: string;
   onTimezoneChange: (timezone: string) => void;
 }
 
-const TimezonePicker = ({ timezone, onTimezoneChange }: TimezonePickerProps) => {
+const TimezonePicker = ({
+  timezone,
+  onTimezoneChange,
+}: TimezonePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
