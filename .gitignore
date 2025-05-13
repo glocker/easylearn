@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 .env
+
+#next
+*.next
+# next-pwa runtime files
+public/sw.js
+public/workbox-*.js

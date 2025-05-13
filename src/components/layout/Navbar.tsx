@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import {
   TrophyIcon,
@@ -38,14 +38,14 @@ export const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 bg-white shadow-sm z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="text-2xl font-light text-gray-800">
+          <Link href="/" className="text-2xl font-light text-gray-800">
             EasyLearn
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden sm:flex space-x-8">
             <Link
-              to="/"
+              href="/"
               className="text-gray-600 hover:text-gray-900 transition-colors duration-200"
             >
               Courses
@@ -124,7 +124,7 @@ export const Navbar = () => {
                   {/* Menu Items */}
                   <div className="py-2">
                     <Link
-                      to="/achievements"
+                      href="/achievements"
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
                     >
                       <TrophyIcon className="w-5 h-5" />
@@ -132,7 +132,7 @@ export const Navbar = () => {
                     </Link>
 
                     <Link
-                      to="/settings"
+                      href="/settings"
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
                     >
                       <Cog6ToothIcon className="w-5 h-5" />
@@ -151,7 +151,7 @@ export const Navbar = () => {
                   {/* Additional Links */}
                   <div className="py-2">
                     <Link
-                      to="/subscribe"
+                      href="/subscribe"
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
                     >
                       <CreditCardIcon className="w-5 h-5" />
@@ -159,7 +159,7 @@ export const Navbar = () => {
                     </Link>
 
                     <Link
-                      to="/privacy"
+                      href="/privacy"
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
                     >
                       <ShieldCheckIcon className="w-5 h-5" />
@@ -167,7 +167,7 @@ export const Navbar = () => {
                     </Link>
 
                     <Link
-                      to="/help"
+                      href="/help"
                       className="flex items-center gap-3 px-4 py-2 text-gray-700 hover:bg-gray-50"
                     >
                       <QuestionMarkCircleIcon className="w-5 h-5" />
@@ -200,7 +200,7 @@ export const Navbar = () => {
         <div className="sm:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <Link
-              to="/"
+              href="/"
               className="block px-3 py-2 rounded-md text-gray-700 hover:text-blue-600 hover:bg-gray-100"
               onClick={() => setIsMenuOpen(false)}
             >

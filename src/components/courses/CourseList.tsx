@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import {
   collection,
   getDocs,
@@ -185,7 +185,7 @@ export const CourseList = () => {
           {filteredCourses.map((course) => (
             <Link
               key={course.id}
-              to={`/courses/${course.id}`}
+              href={`/courses/${course.id}`}
               className="block group"
             >
               <div className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
@@ -196,7 +196,7 @@ export const CourseList = () => {
                     </h3>
                     <Link
                       key={course.id}
-                      to={`/courses/${course.id}/play`}
+                      href={`/courses/${course.id}/play`}
                       className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
                     >
                       <div className="flex items-center justify-between">

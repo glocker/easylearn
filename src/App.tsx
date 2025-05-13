@@ -8,25 +8,9 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { LoginForm } from "./components/auth/LoginForm";
 import { Navbar } from "./components/layout/NavBar";
 
-// Protected route - redirects to login if user is not authenticated
-const PrivateRoute = ({ children }) => {
-  const { user } = useAuth();
-  if (!user) {
-    window.location.href = "/auth/signin";
-    return null;
-  }
-  return children;
-};
-
-// Redirect to home if user is logged in
-const PublicRoute = ({ children }) => {
-  const { user } = useAuth();
-  if (user) {
-    window.location.href = "/";
-    return null;
-  }
-  return children;
-};
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { auth } from "@/lib/firebase";
 
 // Create a wrapper component for CoursePlayer to handle params
 const CoursePlayerWrapper = () => {
@@ -37,6 +21,20 @@ const CoursePlayerWrapper = () => {
   }
 
   return <CoursePlayer courseId={courseId} />;
+};
+
+export const withAuth = (Component: React.FC) => {
+  return function ProtectedPage(props: any) {
+    const router = useRouter();
+
+    useEffect(() => {
+      if (!auth.currentUser) {
+        router.push("/auth/signin");
+      }
+    }, []);
+
+    return <Component {...props} />;
+  };
 };
 
 export const App = () => {
