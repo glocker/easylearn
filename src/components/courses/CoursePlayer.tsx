@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useParams } from "react-router-dom";
+import { useRouter } from "next/router";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Course } from "../../types/Course";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export const CoursePlayer = () => {
-  const { courseId } = useParams();
+  const router = useRouter();
+  const { courseId } = router.query;
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [course, setCourse] = useState<Course | null>(null);
@@ -58,7 +59,7 @@ export const CoursePlayer = () => {
           {error || "No cards found in this course"}
         </div>
         <Link
-          to={`/courses/${courseId}`}
+          href={`/courses/${courseId}`}
           className="text-blue-500 hover:underline"
         >
           Back to course
@@ -93,7 +94,7 @@ export const CoursePlayer = () => {
         <div className="container mx-auto grid grid-cols-3 items-center">
           <div className="flex items-center gap-4">
             <Link
-              to={`/courses/${courseId}`}
+              href={`/courses/${courseId}`}
               className="text-gray-600 hover:text-gray-900"
             >
               ← Back to Course

@@ -1,16 +1,17 @@
-import { Link, useLocation } from "react-router-dom";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { useAuthStore } from "../../store/authStore";
 
 export const Navigation = () => {
   const { user, setUser } = useAuthStore();
-  const location = useLocation();
+  const router = useRouter();
 
   const handleLogout = () => {
     setUser(null);
   };
 
   const isActive = (path: string) => {
-    return location.pathname === path;
+    return router.asPath === path;
   };
 
   return (
@@ -19,14 +20,14 @@ export const Navigation = () => {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link to="/" className="text-xl font-bold text-blue-600">
+              <Link href="/" className="text-xl font-bold text-blue-600">
                 EasyLearn
               </Link>
             </div>
 
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <Link
-                to="/"
+                href="/"
                 className={`${
                   isActive("/")
                     ? "border-blue-500 text-gray-900"
@@ -37,7 +38,7 @@ export const Navigation = () => {
               </Link>
 
               <Link
-                to="/courses"
+                href="/courses"
                 className={`${
                   isActive("/courses")
                     ? "border-blue-500 text-gray-900"
@@ -49,7 +50,7 @@ export const Navigation = () => {
 
               {user?.role === "admin" && (
                 <Link
-                  to="/courses/create"
+                  href="/courses/create"
                   className={`${
                     isActive("/courses/create")
                       ? "border-blue-500 text-gray-900"
@@ -66,7 +67,7 @@ export const Navigation = () => {
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link
-                  to="/profile"
+                  href="/profile"
                   className="text-sm font-medium text-gray-700 hover:text-gray-800"
                 >
                   {user.name}
@@ -80,7 +81,7 @@ export const Navigation = () => {
               </div>
             ) : (
               <Link
-                to="/login"
+                href="/login"
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Log in

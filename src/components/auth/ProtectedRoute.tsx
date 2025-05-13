@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/router";
 import { useAuthStore } from "../../store/authStore";
 
 interface ProtectedRouteProps {
@@ -12,17 +12,17 @@ export const ProtectedRoute = ({
   adminOnly = false,
 }: ProtectedRouteProps) => {
   const { user, isLoading } = useAuthStore();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isLoading && !user) {
-      navigate("/login");
+      router.push("/login");
     }
 
     if (!isLoading && adminOnly && user?.role !== "admin") {
-      navigate("/");
+      router.push("/");
     }
-  }, [user, isLoading, adminOnly, navigate]);
+  }, [user, isLoading, adminOnly, router]);
 
   if (isLoading) {
     return (

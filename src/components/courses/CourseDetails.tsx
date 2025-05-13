@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useRouter } from "next/router";
+import Link from "next/link";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import { Course } from "../../types/Course";
@@ -7,7 +8,8 @@ import { CardCreator } from "../cards/CardCreator";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
 export const CourseDetails = () => {
-  const { courseId } = useParams<{ courseId: string }>();
+  const router = useRouter();
+  const { courseId } = router.query;
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
@@ -76,7 +78,7 @@ export const CourseDetails = () => {
           <h1 className="text-2xl font-bold text-gray-900">{course.title}</h1>
 
           <Link
-            to={`/courses/${course.id}/play`}
+            href={`/courses/${course.id}/play`}
             className="inline-flex items-center px-4 py-2 bg-green-300 text-white rounded-lg hover:bg-green-500 transition-colors gap-2"
           >
             <div className="flex items-center justify-between">
