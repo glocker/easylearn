@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* @import "tailwindcss/components";
 @import "tailwindcss/utilities"; */
@@ -118,4 +120,8 @@ button:focus-visible {
   button {
     /*background-color: #f9f9f9;*/
   }
+}
+
+body {
+  @apply bg-red-200;
 }
