@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -97,6 +97,11 @@ export const CourseList = ({ coursesData }) => {
     }
   };
 
+  const handleLearnClick = (e: SyntheticEvent, course: any) => {
+    e.stopPropagation();
+    router.push(`/courses/${course.id}/play`);
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -171,16 +176,15 @@ export const CourseList = ({ coursesData }) => {
                   <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
                     {course.title}
                   </h3>
-                  <Link
-                    key={course.id}
-                    href={`/courses/${course.id}/play`}
+                  <div
+                    onClick={(e) => handleLearnClick(e, course)}
                     className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
                   >
                     <div className="flex items-center justify-between">
                       <PlayIcon className="h-5 w-5" />
                       <span>Learn</span>
                     </div>
-                  </Link>
+                  </div>
                 </div>
                 <p className="mt-2 text-gray-600">{course.description}</p>
 
