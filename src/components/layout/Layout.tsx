@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 
 interface LayoutProps {
@@ -9,7 +8,6 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 w-full">
-      <Navbar />
       <main className="flex-grow pt-16 w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
           {children}

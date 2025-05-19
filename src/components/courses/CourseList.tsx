@@ -1,4 +1,6 @@
+"use client";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   collection,
@@ -13,8 +15,9 @@ import { Course } from "../../types/Course";
 import { CreateCourseForm } from "./CreateCourseForm";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
-export const CourseList = () => {
-  const [courses, setCourses] = useState<Course[]>([]);
+export const CourseList = ({ coursesData }) => {
+  const router = useRouter();
+  const [courses, setCourses] = useState(coursesData);
   const [categories, setCategories] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,48 +26,23 @@ export const CourseList = () => {
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const coursesQuery = query(
-          collection(db, "courses"),
-          orderBy("createdAt", "desc")
-        );
+    if (!courses) {
+      console.log("No courses available");
+      setCourses([]);
+      setCategories([]);
+      setIsLoading(false);
+      return;
+    } else {
+      // Get uniq category
+      const uniqueCategories = Array.from(
+        new Set(courses.map((course) => course.category))
+      );
 
-        // Add check for collection existence
-        const snapshot = await getDocs(coursesQuery);
-        if (snapshot.empty) {
-          console.log("No courses available");
-          setCourses([]);
-          setCategories([]);
-          return;
-        }
-
-        const coursesData = snapshot.docs.map(
-          (doc) =>
-            ({
-              id: doc.id,
-              ...doc.data(),
-            } as Course)
-        );
-
-        // Get uniq category
-        const uniqueCategories = Array.from(
-          new Set(coursesData.map((course) => course.category))
-        );
-
-        setCourses(coursesData);
-        setCategories(uniqueCategories);
-      } catch (error) {
-        console.error("Error during course loading occurred:", error);
-        setCourses([]);
-        setCategories([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCourses();
-  }, []);
+      setCourses(courses);
+      setCategories(uniqueCategories);
+      setIsLoading(false);
+    }
+  }, [courses]);
 
   const filteredCourses = courses.filter((course) => {
     const matchesCategory =
@@ -183,41 +161,39 @@ export const CourseList = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course) => (
-            <Link
+            <div
               key={course.id}
-              href={`/courses/${course.id}`}
-              className="block group"
+              className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => router.push(`/courses/${course.id}`)}
             >
-              <div className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="p-6">
-                  <div className="mt-4 flex items-center justify-between">
-                    <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                      {course.title}
-                    </h3>
-                    <Link
-                      key={course.id}
-                      href={`/courses/${course.id}/play`}
-                      className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
-                    >
-                      <div className="flex items-center justify-between">
-                        <PlayIcon className="h-5 w-5" />
-                        <span>Learn</span>
-                      </div>
-                    </Link>
-                  </div>
-                  <p className="mt-2 text-gray-600">{course.description}</p>
+              <div className="p-6">
+                <div className="mt-4 flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    {course.title}
+                  </h3>
+                  <Link
+                    key={course.id}
+                    href={`/courses/${course.id}/play`}
+                    className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
+                  >
+                    <div className="flex items-center justify-between">
+                      <PlayIcon className="h-5 w-5" />
+                      <span>Learn</span>
+                    </div>
+                  </Link>
+                </div>
+                <p className="mt-2 text-gray-600">{course.description}</p>
 
-                  <div className="mt-4 flex items-center justify-between">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                      {course.category}
-                    </span>
-                    <span className="text-sm text-gray-500">
-                      {course.cards.length} cards
-                    </span>
-                  </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                    {course.category}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {course.cards.length} cards
+                  </span>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
