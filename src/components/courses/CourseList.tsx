@@ -174,6 +174,7 @@ export const CourseList = ({ coursesData }) => {
                   <Link
                     key={course.id}
                     href={`/courses/${course.id}/play`}
+                    onClick={(e) => e.stopPropagation()}
                     className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
                   >
                     <div className="flex items-center justify-between">
