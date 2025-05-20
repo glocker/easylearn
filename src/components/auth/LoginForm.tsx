@@ -1,9 +1,10 @@
+"use client";
 import { useState } from "react";
 import { auth } from "../../utils/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { SocialLogin } from "./SocialLogin";
 
-export const LoginForm = () => {
+export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -83,4 +84,4 @@ export const LoginForm = () => {
       </div>
     </div>
   );
-};
+}

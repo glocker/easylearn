@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import {
@@ -14,7 +15,7 @@ import NotificationsSection from "./NotificationsSection";
 import TimezoneSection from "./TimezoneSection";
 import AccountPrivacySection from "./AccountPrivacySection";
 
-export const Settings = () => {
+export default function Settings() {
   const { user } = useAuth();
 
   if (!user) {
@@ -170,6 +171,4 @@ export const Settings = () => {
       </div>
     </div>
   );
-};
-
-export default Settings;
+}
