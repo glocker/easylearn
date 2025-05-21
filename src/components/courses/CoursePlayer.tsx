@@ -1,6 +1,7 @@
+"use client";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
 import Link from "next/link";
@@ -8,8 +9,8 @@ import { Course } from "../../types/Course";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export const CoursePlayer = () => {
-  const router = useRouter();
-  const { courseId } = router.query;
+  const params = useParams();
+  const courseId = params?.courseId;
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [course, setCourse] = useState<Course | null>(null);
