@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { useAuthStore } from "../../store/authStore";
 import { Card } from "../../types/Card";

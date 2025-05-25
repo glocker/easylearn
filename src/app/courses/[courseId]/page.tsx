@@ -1,13 +1,12 @@
 "use client";
 import { useParams } from "next/navigation";
-import { CoursePlayer } from "../../../components/courses/CoursePlayer";
-import { CourseList } from "../../../components/courses/CourseList";
+import { CourseDetails } from "../../../components/courses/CourseDetails";
 
-export default function CoursePlayerPage() {
+export default function CourseDetailsPage() {
   const params = useParams();
   const courseId = params?.courseId;
 
-  if (!courseId || typeof courseId !== "string") return <CourseList />;
+  if (!courseId || typeof courseId !== "string") return <CourseDetails />;
 
-  return <CoursePlayer courseId={courseId} />;
+  return <CourseDetails courseId={courseId} />;
 }

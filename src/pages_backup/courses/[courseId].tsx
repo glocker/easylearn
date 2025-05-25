@@ -6,7 +6,7 @@ export default function CoursePlayerPage() {
   const router = useRouter();
   const { courseId } = router.query;
 
-  if (!courseId || typeof courseId !== "string") return <CourseList />;
+  //if (!courseId || typeof courseId !== "string") return <CourseList />;
 
   return <CoursePlayer courseId={courseId} />;
 }
