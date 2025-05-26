@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../utils/firebase";
@@ -8,8 +8,8 @@ import { CardCreator } from "../cards/CardCreator";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
 export const CourseDetails = () => {
-  const router = useRouter();
-  const courseId = router.query;
+  const params = useParams();
+  const courseId = params?.courseId;
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
