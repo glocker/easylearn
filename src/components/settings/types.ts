@@ -1,4 +1,4 @@
-import { Course, UserProfile } from "../../utils/firebase";
+import { Course, UserProfile } from "@/utils/firebase";
 
 export interface DropdownState {
   accountType: boolean;

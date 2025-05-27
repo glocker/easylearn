@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { auth } from "../../utils/firebase";
+import { auth } from "@/utils/firebase";
 
 export function withAuth<P>(Component: React.ComponentType<P>) {
   return function ProtectedComponent(props: P) {

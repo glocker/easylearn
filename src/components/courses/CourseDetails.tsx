@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../utils/firebase";
-import { Course } from "../../types/Course";
-import { CardCreator } from "../cards/CardCreator";
+import { db } from "@/utils/firebase";
+import { Course } from "@/types/Course";
+import { CardCreator } from "@/cards/CardCreator";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
 export const CourseDetails = () => {

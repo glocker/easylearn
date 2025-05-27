@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { Course, CourseProgress } from "../types/Course";
-import { db } from "../utils/firebase";
+import { Course, CourseProgress } from "@/types/Course";
+import { db } from "@/utils/firebase";
 import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 
 interface CourseState {

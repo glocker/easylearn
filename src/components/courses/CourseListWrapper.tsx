@@ -3,7 +3,7 @@
 import { use } from "react";
 import { CourseList } from "./CourseList";
 import { QuerySnapshot, DocumentData } from "firebase/firestore";
-import { Course } from "../../types/Course";
+import { Course } from "@/types/Course";
 
 type Props = {
   promise: Promise<QuerySnapshot<DocumentData>>;

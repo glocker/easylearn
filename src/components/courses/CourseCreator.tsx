@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useAuthStore } from "../../store/authStore";
-import { Card } from "../../types/Card";
-import { db } from "../../utils/firebase";
+import { useAuthStore } from "@/store/authStore";
+import { Card } from "@/types/Card";
+import { db } from "@/utils/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
 export const CourseCreator = () => {

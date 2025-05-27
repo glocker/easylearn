@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useAuthStore } from "../store/authStore";
-import { db } from "../utils/firebase";
+import { useAuthStore } from "@/store/authStore";
+import { db } from "@/utils/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
-import { Course, CourseProgress } from "../types/Course";
+import { Course, CourseProgress } from "@/types/Course";
 
 export const Profile = () => {
   const { user } = useAuthStore();

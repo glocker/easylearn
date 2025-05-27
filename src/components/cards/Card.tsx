@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Card as CardType } from "../../types/Card";
+import { Card as CardType } from "@/types/Card";
 
 interface CardProps {
   card: CardType;

@@ -9,8 +9,8 @@ import {
   ShieldCheckIcon,
   CreditCardIcon,
 } from "@heroicons/react/24/outline";
-import reactLogo from "../../assets/react.svg";
-import { useAuth } from "../../contexts/AuthContext";
+import reactLogo from "@/assets/react.svg";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

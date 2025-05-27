@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { CourseDetails } from "../../../components/courses/CourseDetails";
+import { CourseDetails } from "@/components/courses/CourseDetails";
 
 export default function CourseDetailsPage() {
   const params = useParams();

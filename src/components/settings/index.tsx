@@ -1,11 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   getUserProfile,
   updateUserProfile,
   UserProfile,
-} from "../../utils/firebase";
+} from "@/utils/firebase";
 import { getDefaultTimezone } from "./utils";
 
 // Import component sections

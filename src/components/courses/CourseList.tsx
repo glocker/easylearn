@@ -10,8 +10,8 @@ import {
   addDoc,
   Timestamp,
 } from "firebase/firestore";
-import { db } from "../../utils/firebase";
-import { Course } from "../../types/Course";
+import { db } from "@/utils/firebase";
+import { Course } from "@/types/Course";
 import { CreateCourseForm } from "./CreateCourseForm";
 import { PlayIcon } from "@heroicons/react/24/solid";
 

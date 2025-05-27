@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
-import { db } from "../../utils/firebase";
+import { db } from "@/utils/firebase";
 
 interface CardCreatorProps {
   courseId: string;

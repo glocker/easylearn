@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../../utils/firebase";
+import { db } from "@/utils/firebase";
 import Link from "next/link";
-import { Course } from "../../types/Course";
+import { Course } from "@/types/Course";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 
 export const CoursePlayer = () => {

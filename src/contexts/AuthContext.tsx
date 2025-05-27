@@ -7,7 +7,7 @@ import {
   type FC,
   type ReactNode,
 } from "react";
-import { auth } from "../utils/firebase";
+import { auth } from "@/utils/firebase";
 import { User } from "firebase/auth";
 
 interface AuthContextType {
