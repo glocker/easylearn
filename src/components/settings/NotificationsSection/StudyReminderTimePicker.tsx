@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { NOTIFICATION_HOURS } from "@/constants";
+import { NOTIFICATION_HOURS } from "@/components/settings/constants";
 
 interface StudyReminderTimePickerProps {
   notificationTime: string;

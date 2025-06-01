@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { THEMES } from "@/constants";
+import { THEMES } from "@/components/settings/constants";
 
 interface ThemeSelectorProps {
   currentTheme: string;

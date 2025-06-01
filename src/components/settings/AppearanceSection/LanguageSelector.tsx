@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { LANGUAGES } from "@/constants";
+import { LANGUAGES } from "@/components/settings/constants";
 
 interface LanguageSelectorProps {
   currentLanguage: string;
