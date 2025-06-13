@@ -1,9 +1,21 @@
-export type UserRole = "admin" | "user";
+import { Timestamp } from "firebase/firestore";
+
+export type AccountType = "Teacher" | "Student";
 
 export interface User {
-  id: string;
+  uid: string;
   email: string;
-  name: string;
-  role: UserRole;
-  avatar?: string;
+  accountType: AccountType;
+  avatar: string;
+  username: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  settings: {
+    language: string;
+    notifications: {
+      studyReminders: string;
+    };
+    theme: string;
+  };
+  timezone: string;
 }

@@ -1,15 +1,12 @@
 import { Timestamp } from "firebase/firestore";
+import { Card } from "@/types/Card";
 
 export interface Course {
-  id: string;
   title: string;
   description: string;
   category: string;
-  cards: Array<{
-    question: string;
-    answer: string;
-  }>;
   createdAt: Timestamp;
+  cards: Card[];
 }
 
 export interface CourseProgress {
