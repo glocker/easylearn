@@ -4,7 +4,7 @@ import Link from "next/link";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { Course } from "@/types/Course";
-import { CardCreator } from "@/cards/CardCreator";
+import { CardCreator } from "@/components/cards/CardCreator";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
 export const CourseDetails = () => {
