@@ -15,7 +15,11 @@ import { Course } from "@/types/Course";
 import { CreateCourseForm } from "./CreateCourseForm";
 import { PlayIcon } from "@heroicons/react/24/solid";
 
-export const CourseList = ({ coursesData }) => {
+interface CourseListProps {
+  coursesData: Course[];
+}
+
+export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
   const router = useRouter();
   const [courses, setCourses] = useState(coursesData);
   const [categories, setCategories] = useState<string[]>([]);
@@ -168,32 +172,19 @@ export const CourseList = ({ coursesData }) => {
           {filteredCourses.map((course) => (
             <div
               key={course.id}
-              className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-              onClick={() => router.push(`/courses/${course.id}`)}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
               <div className="p-6">
-                <div className="mt-4 flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    {course.title}
-                  </h3>
-                  <div
-                    onClick={(e) => handleLearnClick(e, course)}
-                    className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
-                  >
-                    <div className="flex items-center justify-between">
-                      <PlayIcon className="h-5 w-5" />
-                      <span>Learn</span>
-                    </div>
-                  </div>
-                </div>
-                <p className="mt-2 text-gray-600">{course.description}</p>
-
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {course.category}
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {course.title}
+                </h3>
+                <p className="text-gray-600 mb-4">{course.description}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">
+                    {course.cards?.length || 0} карточек
                   </span>
                   <span className="text-sm text-gray-500">
-                    {course.cards.length} cards
+                    {course.category}
                   </span>
                 </div>
               </div>
