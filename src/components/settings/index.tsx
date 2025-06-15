@@ -18,13 +18,6 @@ import AccountPrivacySection from "./AccountPrivacySection";
 export default function Settings() {
   const { user } = useAuth();
 
-  if (!user) {
-    if (typeof window !== "undefined") {
-      window.location.href = "/auth/signin";
-    }
-    return null;
-  }
-
   // State for settings
   const [isProfileLoaded, setIsProfileLoaded] = useState(false);
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -34,16 +27,13 @@ export default function Settings() {
   const [notificationTime, setNotificationTime] = useState("08:00");
   const [timezone, setTimezone] = useState(getDefaultTimezone());
   const [error, setError] = useState<string | null>(null);
-
-  // Privacy settings
   const [showRealName, setShowRealName] = useState(false);
   const [showInSearch, setShowInSearch] = useState(false);
 
-  // Load user profile
   useEffect(() => {
-    const loadUserProfile = async () => {
-      if (!user?.uid) return;
+    if (!user?.uid) return;
 
+    const loadUserProfile = async () => {
       const profile = await getUserProfile(user.uid);
       if (profile) {
         setTheme(profile.settings.theme);
@@ -52,13 +42,19 @@ export default function Settings() {
         setNotificationTime(profile.settings.notifications.studyReminders);
         setAccountType(profile.accountType);
         setAvatar(profile.settings.avatar);
-
         setIsProfileLoaded(true);
       }
     };
 
     loadUserProfile();
   }, [user?.uid]);
+
+  if (!user) {
+    if (typeof window !== "undefined") {
+      window.location.href = "/auth/signin";
+    }
+    return null;
+  }
 
   // Update settings in the database
   const updateSettings = async (updates: Partial<UserProfile["settings"]>) => {
