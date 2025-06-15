@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { db } from "../utils/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { CourseList } from "@/components/courses/CourseList";
