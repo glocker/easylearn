@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/store/authStore";
 import {
   getUserProfile,
   updateUserProfile,
@@ -17,11 +18,10 @@ import AccountPrivacySection from "./AccountPrivacySection";
 
 export default function Settings() {
   const { user } = useAuth();
+  const { setUser } = useAuthStore();
 
   // State for settings
   const [isProfileLoaded, setIsProfileLoaded] = useState(false);
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [accountType, setAccountType] = useState("Student");
   const [theme, setTheme] = useState("auto");
   const [language, setLanguage] = useState("en");
   const [notificationTime, setNotificationTime] = useState("08:00");
@@ -32,7 +32,6 @@ export default function Settings() {
 
   useEffect(() => {
     if (!user?.uid) return;
-
     const loadUserProfile = async () => {
       const profile = await getUserProfile(user.uid);
       if (profile) {
@@ -40,14 +39,12 @@ export default function Settings() {
         setLanguage(profile.settings.language);
         setTimezone(profile.settings.timezone);
         setNotificationTime(profile.settings.notifications.studyReminders);
-        setAccountType(profile.accountType);
-        setAvatar(profile.settings.avatar);
+        setUser(profile); // Save profile in zustand
         setIsProfileLoaded(true);
       }
     };
-
     loadUserProfile();
-  }, [user?.uid]);
+  }, [user?.uid, setUser]);
 
   if (!user) {
     if (typeof window !== "undefined") {
@@ -107,7 +104,6 @@ export default function Settings() {
 
   // Handle account type change
   const handleAccountTypeChange = async (newType: string) => {
-    setAccountType(newType);
     // Update account type in profile
     if (user?.uid) {
       try {
@@ -133,10 +129,10 @@ export default function Settings() {
 
         <ProfileSection
           userId={user.uid}
-          avatar={avatar}
-          username="admin" // This would come from user profile
-          email="admin@gmail.com" // This would come from user profile
-          accountType={accountType}
+          avatar={user.avatar}
+          username={user.username}
+          email={user.email}
+          accountType={user.accountType}
           onAccountTypeChange={handleAccountTypeChange}
         />
 

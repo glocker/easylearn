@@ -11,12 +11,23 @@ import {
 } from "@heroicons/react/24/outline";
 import reactLogo from "@/assets/react.svg";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAuthStore } from "@/store/authStore";
+import { getUserProfile } from "@/utils/firebase";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const { signOut } = useAuth();
+  const { user, setUser } = useAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      getUserProfile("VDV7KI1fwQMqOuCr3pFy1IkjiUO2").then((demoUser) => {
+        if (demoUser) setUser(demoUser);
+      });
+    }
+  }, [user, setUser]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -91,11 +102,15 @@ export const Navbar = () => {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="flex items-center"
               >
-                <img
-                  src={reactLogo}
-                  alt="Profile"
-                  className="w-8 h-8 rounded-full"
-                />
+                {user && user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt="avatar"
+                    className="h-8 w-8 rounded-full"
+                  />
+                ) : (
+                  <img src={reactLogo} alt="React Logo" className="h-8 w-8" />
+                )}
               </button>
 
               {/* Dropdown Menu */}
