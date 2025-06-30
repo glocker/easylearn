@@ -19,3 +19,7 @@ App which helps you to learn faster
 - Tailwind CSS for styling
 - Firebase as database
 - PWA for offline functionality
+  
+## Demo
+### Feel free to use app and leave your review
+### https://easylearn381.netlify.app/
