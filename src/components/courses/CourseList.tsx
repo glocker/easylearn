@@ -151,7 +151,7 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
           >
             <option value="all">All categories</option>
             {categories.map((category) => (
@@ -172,16 +172,30 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
           {filteredCourses.map((course) => (
             <div
               key={course.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => router.push(`/courses/${course.id}`)}
             >
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {course.title}
-                </h3>
-                <p className="text-gray-600 mb-4">{course.description}</p>
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {course.title}
+                  </h3>
+                  <div className="flex items-center justify-between">
+                    <div
+                      onClick={(e) => handleLearnClick(e, course)}
+                      className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
+                    >
+                      <div className="flex items-center justify-between">
+                        <PlayIcon className="h-5 w-5" />
+                        <span>Learn</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-600 mb-4 mt-4">{course.description}</p>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">
-                    {course.cards?.length || 0} карточек
+                    {course.cards?.length || 0} cards
                   </span>
                   <span className="text-sm text-gray-500">
                     {course.category}
