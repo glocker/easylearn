@@ -17,5 +17,5 @@ App which helps you to learn faster
 - TypeScript
 - Zustand for state management
 - Tailwind CSS for styling
-- Firebase for backend
+- Firebase as database
 - PWA for offline functionality
