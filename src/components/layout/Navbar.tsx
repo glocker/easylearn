@@ -104,7 +104,7 @@ export const Navbar = () => {
               >
                 {user && user.avatar ? (
                   <img
-                    src={user.avatar}
+                    src={user.settings.avatar}
                     alt="avatar"
                     className="h-8 w-8 rounded-full"
                   />
