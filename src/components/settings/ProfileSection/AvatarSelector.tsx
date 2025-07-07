@@ -1,31 +1,31 @@
-import { useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { AVATARS, AVATAR_URL } from "@/components/settings/constants";
+import { AVATARS, AVATAR_URL } from "@/constants";
 import { updateUserAvatar } from "@/utils/firebase";
+import { useAuthStore } from "@/store/authStore";
 
 interface AvatarSelectorProps {
   userId: string;
-  currentAvatar: string | null;
 }
 
-const AvatarSelector = ({ userId, currentAvatar }: AvatarSelectorProps) => {
-  const [selectedAvatar, setSelectedAvatar] = useState(0);
-  const avatarUrl = currentAvatar ? `${AVATAR_URL}${currentAvatar}` : null;
+const AvatarSelector = ({ userId }: AvatarSelectorProps) => {
+  const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
 
-  const handleAvatarChange = async (
-    uid: string,
-    seed: string,
-    index: number
-  ) => {
-    setSelectedAvatar(index);
+  const currentAvatarSeed = user?.avatar;
+  const selectedAvatarIndex = AVATARS.findIndex(
+    (avatar) => avatar.seed === currentAvatarSeed
+  );
 
-    if (!uid) return;
+  const handleAvatarChange = async (seed: string) => {
+    if (!userId || !user) return;
+
+    setUser({ ...user, avatar: seed });
 
     try {
-      await updateUserAvatar(uid, seed);
-      alert("Avatar successfully updated!");
+      await updateUserAvatar(userId, seed);
     } catch (error) {
-      console.error("Error while updating avatar occurred:", error);
+      console.error("Error updating avatar:", error);
+      setUser({ ...user, avatar: currentAvatarSeed });
     }
   };
 
@@ -34,13 +34,13 @@ const AvatarSelector = ({ userId, currentAvatar }: AvatarSelectorProps) => {
       <h2 className="text-lg font-medium text-gray-900 mb-4">Profile Photo</h2>
       <div className="flex flex-wrap gap-4">
         <div className="w-24 h-24 rounded-full flex items-center justify-center border-2 border-blue-500">
-          {avatarUrl && (
+          {currentAvatarSeed && (
             <img
-              src={avatarUrl}
-              alt={`Avatar ${currentAvatar}`}
-              width={100}
-              height={100}
-              style={{ borderRadius: "50%" }}
+              src={`${AVATAR_URL}${currentAvatarSeed}`}
+              alt={`Avatar ${currentAvatarSeed}`}
+              className="rounded-full"
+              width={64}
+              height={64}
             />
           )}
         </div>
@@ -48,10 +48,10 @@ const AvatarSelector = ({ userId, currentAvatar }: AvatarSelectorProps) => {
           {AVATARS.map((avatar, index) => (
             <button
               key={avatar.id}
-              onClick={() => handleAvatarChange(userId, avatar.seed, index)}
+              onClick={() => handleAvatarChange(avatar.seed)}
               className={`w-24 h-24 flex items-center justify-center border rounded-full
                 ${
-                  selectedAvatar === index
+                  selectedAvatarIndex === index
                     ? "border-blue-500"
                     : "border-gray-200 hover:border-gray-400"
                 }`}

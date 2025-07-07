@@ -8,8 +8,8 @@ import {
   LanguageOption,
   TimezoneOption,
   AvatarOption,
-} from "./types";
-import { getCitiesForTimezone } from "./utils";
+} from "./components/settings/types";
+import { getCitiesForTimezone } from "./components/settings/utils";
 
 export const AVATAR_URL: string =
   "https://api.dicebear.com/9.x/dylan/svg?seed=";
