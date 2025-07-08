@@ -6,6 +6,7 @@ import { db } from "@/utils/firebase";
 import { Course } from "@/types/Course";
 import { CreateCourseForm } from "./CreateCourseForm";
 import { PlayIcon } from "@heroicons/react/24/solid";
+import { NotificationPortal } from "@/components/ui/NotificationPortal";
 
 interface CourseListProps {
   coursesData: Course[];
@@ -20,6 +21,7 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
 
   useEffect(() => {
     if (!courses) {
@@ -76,7 +78,7 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
         cards: [],
       });
       setShowCreateForm(false);
-      alert("Course created successfully!");
+      setNotification("Course created successfully!");
     } catch (error) {
       console.error("Error creating course:", error);
       alert("Failed to create course. Please try again.");
@@ -100,6 +102,13 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
 
   return (
     <section>
+      {notification && (
+        <NotificationPortal
+          message={notification}
+          onClose={() => setNotification(null)}
+          type="success"
+        />
+      )}
       <div className="mb-8 flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Courses for learning
@@ -124,7 +133,7 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
 
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-          <div className="relative flex-1">
+          <div className="flex-1">
             <label htmlFor="course-search" className="sr-only">
               Search courses
             </label>
