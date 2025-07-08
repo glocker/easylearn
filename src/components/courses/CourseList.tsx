@@ -1,15 +1,7 @@
 "use client";
 import { useState, useEffect, SyntheticEvent } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  addDoc,
-  Timestamp,
-} from "firebase/firestore";
+import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/utils/firebase";
 import { Course } from "@/types/Course";
 import { CreateCourseForm } from "./CreateCourseForm";
@@ -31,18 +23,15 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
 
   useEffect(() => {
     if (!courses) {
-      console.log("No courses available");
       setCourses([]);
       setCategories([]);
       setIsLoading(false);
       return;
     } else {
-      // Get uniq category
+      // Get unique categories
       const uniqueCategories = Array.from(
         new Set(courses.map((course) => course.category))
       );
-
-      setCourses(courses);
       setCategories(uniqueCategories);
       setIsLoading(false);
     }
@@ -65,15 +54,11 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
         createdAt: Timestamp.now(),
         cards: [],
       };
-
       const docRef = await addDoc(courseRef, newCourse);
-
-      // Add new course to the state
       setCourses((prevCourses) => [
         { ...newCourse, id: docRef.id } as Course,
         ...prevCourses,
       ]);
-
       return docRef.id;
     } catch (error) {
       console.error("Error creating course:", error);
@@ -91,7 +76,6 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
         cards: [],
       });
       setShowCreateForm(false);
-      // Show success message
       alert("Course created successfully!");
     } catch (error) {
       console.error("Error creating course:", error);
@@ -101,7 +85,7 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
     }
   };
 
-  const handleLearnClick = (e: SyntheticEvent, course: any) => {
+  const handleLearnClick = (e: SyntheticEvent, course: Course) => {
     e.stopPropagation();
     router.push(`/courses/${course.id}/play`);
   };
@@ -115,14 +99,16 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
   }
 
   return (
-    <div>
+    <section>
       <div className="mb-8 flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Courses for learning
         </h2>
         <button
+          type="button"
           onClick={() => setShowCreateForm(true)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
+          aria-label="Create new course"
         >
           Create Course
         </button>
@@ -139,7 +125,11 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
       <div className="mb-8">
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <div className="relative flex-1">
+            <label htmlFor="course-search" className="sr-only">
+              Search courses
+            </label>
             <input
+              id="course-search"
               type="text"
               placeholder="Searching courses..."
               value={searchQuery}
@@ -148,7 +138,11 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
             />
           </div>
 
+          <label htmlFor="category-select" className="sr-only">
+            Category
+          </label>
           <select
+            id="category-select"
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
@@ -168,31 +162,37 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
           <p className="text-gray-500">Courses not found</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((course) => (
-            <div
+            <li
               key={course.id}
               className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => router.push(`/courses/${course.id}`)}
+              tabIndex={0}
+              aria-label={`Open course ${course.title}`}
             >
               <div className="p-6">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2 truncate">
                     {course.title}
                   </h3>
                   <div className="flex items-center justify-between">
-                    <div
+                    <button
+                      type="button"
                       onClick={(e) => handleLearnClick(e, course)}
-                      className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500"
+                      className="px-4 py-2 bg-green-300 text-black rounded-lg hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+                      aria-label={`Start learning ${course.title}`}
                     >
                       <div className="flex items-center justify-between">
                         <PlayIcon className="h-5 w-5" />
                         <span>Learn</span>
                       </div>
-                    </div>
+                    </button>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4 mt-4">{course.description}</p>
+                <p className="text-gray-600 mb-4 mt-4 line-clamp-2">
+                  {course.description}
+                </p>
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">
                     {course.cards?.length || 0} cards
@@ -202,10 +202,10 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
                   </span>
                 </div>
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
-    </div>
+    </section>
   );
 };
