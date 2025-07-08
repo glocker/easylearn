@@ -13,6 +13,7 @@ import reactLogo from "@/assets/react.svg";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAuthStore } from "@/store/authStore";
 import { getUserProfile } from "@/utils/firebase";
+import { AVATAR_URL } from "@/constants";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -102,9 +103,9 @@ export const Navbar = () => {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="flex items-center"
               >
-                {user && user.avatar ? (
+                {user?.settings?.avatar ? (
                   <img
-                    src={user.settings.avatar}
+                    src={`${AVATAR_URL}${user.settings.avatar}`}
                     alt="avatar"
                     className="h-8 w-8 rounded-full"
                   />
