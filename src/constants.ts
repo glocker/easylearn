@@ -9,7 +9,7 @@ import {
   TimezoneOption,
   AvatarOption,
 } from "./components/settings/types";
-import { getCitiesForTimezone } from "./components/settings/utils";
+import { getCitiesForTimezone } from "./features/settings/utils";
 
 export const AVATAR_URL: string =
   "https://api.dicebear.com/9.x/dylan/svg?seed=";

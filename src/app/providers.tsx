@@ -1,10 +1,10 @@
 "use client";
 
-import { AuthProvider } from "@/contexts/AuthContext";
-import { Navbar } from "@/components/layout/Navbar";
+import { AuthProvider } from "@/shared/contexts/AuthContext";
+import { Navbar } from "@/widgets/Navbar";
 import { useEffect } from "react";
-import { useAuthStore } from "@/store/authStore";
-import { getUserProfile } from "@/utils/firebase";
+import { useAuthStore } from "@/entities/user/store";
+import { getUserProfile } from "@/shared/utils/firebase";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const { setUser } = useAuthStore();

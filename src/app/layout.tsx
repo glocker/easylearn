@@ -1,6 +1,6 @@
-import "@/styles/globals.css";
+import "@/shared/styles/globals.css";
 import { Providers } from "./providers";
-import { Footer } from "@/components/layout/Footer";
+import { Footer } from "@/widgets/Layout/Footer";
 
 export const metadata = {
   title: "EasyLearn",

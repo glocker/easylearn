@@ -15,11 +15,14 @@ App which helps you to learn faster
 
 - React + Next.js
 - TypeScript
+- Feature sliced design (FSD)
 - Zustand for state management
 - Tailwind CSS for styling
 - Firebase as database
 - PWA for offline functionality
-  
+
 ## Demo
+
 ### Feel free to use app and leave your review
+
 ### https://easylearn381.netlify.app/

@@ -1,6 +1,6 @@
-import { db } from "../utils/firebase";
+import { db } from "@/shared/utils/firebase";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
-import { CourseList } from "@/components/courses/CourseList";
+import { CourseList } from "@/widgets/CourseList";
 
 export default async function HomePage() {
   const snapshot = await getDocs(
