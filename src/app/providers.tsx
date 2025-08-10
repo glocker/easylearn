@@ -5,8 +5,10 @@ import { Navbar } from "@/widgets/Navbar";
 import { useEffect } from "react";
 import { useAuthStore } from "@/entities/user/store";
 import { getUserProfile } from "@/shared/utils/firebase";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const queryClient = new QueryClient();
   const { setUser } = useAuthStore();
 
   useEffect(() => {
@@ -17,9 +19,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }, [setUser]);
 
   return (
-    <AuthProvider>
-      <Navbar />
-      {children}
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Navbar />
+        {children}
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
