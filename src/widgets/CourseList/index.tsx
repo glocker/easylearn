@@ -1,89 +1,72 @@
 "use client";
-import { useState, useEffect, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "@/shared/utils/firebase";
-import { Course } from "@/entities/course/types";
+import { Course, NewCourseInput } from "@/entities/course/types";
 import { CreateCourseForm } from "@/features/course/CreateCourseForm";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { NotificationPortal } from "@/shared/ui/NotificationPortal";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchCourses } from "@/entities/course/api/fetchCourses";
 
-interface CourseListProps {
-  coursesData: Course[];
-}
-
-export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
+export function CourseList() {
   const router = useRouter();
-  const [courses, setCourses] = useState(coursesData);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
-  const [notification, setNotification] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (!courses) {
-      setCourses([]);
-      setCategories([]);
-      setIsLoading(false);
-      return;
-    } else {
-      // Get unique categories
-      const uniqueCategories = Array.from(
-        new Set(courses.map((course) => course.category))
-      );
-      setCategories(uniqueCategories);
-      setIsLoading(false);
-    }
-  }, [courses]);
-
-  const filteredCourses = courses.filter((course) => {
-    const matchesCategory =
-      selectedCategory === "all" || course.category === selectedCategory;
-    const matchesSearch =
-      course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      course.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+  const { data: courses = [], isLoading } = useQuery<Course[]>({
+    queryKey: ["courses"],
+    queryFn: fetchCourses,
   });
 
-  const createCourse = async (courseData: Omit<Course, "id">) => {
-    try {
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
+
+  // Calculate on fly (no state, no effect)
+  const categories = useMemo(
+    () => Array.from(new Set(courses.map((course: Course) => course.category))),
+    [courses]
+  );
+
+  const filteredCourses = useMemo(() => {
+    const query = searchQuery.toLowerCase().trim();
+    return courses.filter((course) => {
+      const matchesCategory =
+        selectedCategory === "all" || course.category === selectedCategory;
+      const matchesSearch =
+        course.title.toLowerCase().includes(query) ||
+        course.description.toLowerCase().includes(query);
+      return matchesCategory && matchesSearch;
+    });
+  }, [courses, searchQuery, selectedCategory]);
+
+  // Create course and invalidate list
+  const createCourseMutation = useMutation({
+    mutationFn: async (payload: NewCourseInput) => {
       const courseRef = collection(db, "courses");
       const newCourse = {
-        ...courseData,
+        ...payload,
         createdAt: Timestamp.now(),
-        cards: [],
+        cards: [] as Course["cards"],
       };
       const docRef = await addDoc(courseRef, newCourse);
-      setCourses((prevCourses) => [
-        { ...newCourse, id: docRef.id } as Course,
-        ...prevCourses,
-      ]);
       return docRef.id;
-    } catch (error) {
-      console.error("Error creating course:", error);
-      throw error;
-    }
-  };
-
-  const handleCreateCourse = async (
-    courseData: Omit<Course, "id" | "createdAt" | "cards">
-  ) => {
-    setIsCreating(true);
-    try {
-      await createCourse({
-        ...courseData,
-        cards: [],
-      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
       setShowCreateForm(false);
       setNotification("Course created successfully!");
+    },
+  });
+
+  const handleCreateCourse = async (formData: NewCourseInput) => {
+    try {
+      await createCourseMutation.mutateAsync(formData);
     } catch (error) {
       console.error("Error creating course:", error);
       alert("Failed to create course. Please try again.");
-    } finally {
-      setIsCreating(false);
     }
   };
 
@@ -109,6 +92,7 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
           type="success"
         />
       )}
+
       <div className="mb-8 flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">
           Courses for learning
@@ -217,4 +201,4 @@ export const CourseList: React.FC<CourseListProps> = ({ coursesData }) => {
       )}
     </section>
   );
-};
+}
